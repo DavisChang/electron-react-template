@@ -3,7 +3,6 @@ const { app, BrowserWindow } = require('electron');
 const isDev = require('electron-is-dev');
 
 function createWindow() {
-  console.log('__dirname:', __dirname, app.getAppPath())
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
@@ -14,10 +13,10 @@ function createWindow() {
     },
   });
 
-
   // and load the index.html of the app.
   // win.loadFile("index.html");
   console.log('isDev:', isDev)
+  console.log('isVisible:', win.isVisible())
   win.loadURL(
     isDev
       ? 'http://localhost:3000'
