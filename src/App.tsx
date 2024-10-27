@@ -5,14 +5,19 @@ import Btn from "components/Btn.tsx";
 import { RootLayout, Sidebar, Content } from "@/components/AppLayout";
 import { formatDateFromMs } from "@/utils/formatDate";
 import { MarkdownEditor } from "./components/MarkdownEditor";
+import { FloatingNoteTitle } from "./components/FloatingNoteTitle";
+import { PreviewList } from "./components/SideBar/PreviewList";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <RootLayout>
-      <Sidebar className="p-2 border-4 border-red-500">Sidebar</Sidebar>
-      <Content className="border-4 border-blue-500">
+      <Sidebar className="p-2">
+        <PreviewList className="mt-3 space-y-1" />
+      </Sidebar>
+      <Content className="border-l bg-zinc-900/50 border-l-white/20 ">
+        <FloatingNoteTitle />
         <div>
           <div className="flex justify-center m-4">
             <a href="https://electron-vite.github.io" target="_blank">
