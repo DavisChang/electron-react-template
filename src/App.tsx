@@ -4,6 +4,7 @@ import viteLogo from "/electron-vite.animate.svg";
 import Btn from "components/Btn.tsx";
 import { RootLayout, Sidebar, Content } from "@/components/AppLayout";
 import { formatDateFromMs } from "@/utils/formatDate";
+import { MarkdownEditor } from "./components/MarkdownEditor";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -35,6 +36,10 @@ function App() {
             <Btn />
           </div>
           <p>Click on the Vite and React logos to learn more</p>
+
+          <div>
+            <MarkdownEditor />
+          </div>
         </div>
       </Content>
     </RootLayout>
