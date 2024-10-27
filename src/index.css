@@ -2,7 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+@layer base {
+  #root {
+    @apply h-full;
+  }
+
+  html,
+  body {
+    @apply h-full;
+    @apply select-none;
+    @apply bg-transparent;
+    @apply font-mono antialiased text-white;
+    @apply overflow-hidden;
+  }
+}
+
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -70,3 +88,33 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
