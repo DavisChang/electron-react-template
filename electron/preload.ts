@@ -24,3 +24,11 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
   // You can expose other APTs you need here.
   // ...
 });
+
+try {
+  contextBridge.exposeInMainWorld("context", {
+    locate: navigator.language,
+  });
+} catch (error) {
+  console.error("ContextBridge, context");
+}

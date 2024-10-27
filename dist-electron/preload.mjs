@@ -23,3 +23,10 @@ electron.contextBridge.exposeInMainWorld("ipcRenderer", {
   // You can expose other APTs you need here.
   // ...
 });
+try {
+  electron.contextBridge.exposeInMainWorld("context", {
+    locate: navigator.language
+  });
+} catch (error) {
+  console.error("ContextBridge, context");
+}

@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/electron-vite.animate.svg";
 import Btn from "components/Btn.tsx";
 import { RootLayout, Sidebar, Content } from "@/components/AppLayout";
+import { formatDateFromMs } from "@/utils/formatDate";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,7 +23,7 @@ function App() {
           </div>
 
           <h1 className="text-3xl font-bold underline">
-            Electron with Vite + React
+            Electron with Vite + React {formatDateFromMs(Date.now())}
           </h1>
           <div>
             <button onClick={() => setCount((count) => count + 1)}>
