@@ -1,3 +1,4 @@
+import { useMarkdownEditor } from "@/hooks/useMarkdownEditor";
 import {
   MDXEditor,
   headingsPlugin,
@@ -7,9 +8,13 @@ import {
 } from "@mdxeditor/editor";
 
 export const MarkdownEditor = () => {
+  const { selectedNote } = useMarkdownEditor();
+
+  if (!selectedNote) return null;
   return (
     <MDXEditor
-      markdown="# Title from MDX Editor"
+      key={selectedNote.title}
+      markdown={selectedNote.content}
       plugins={[
         headingsPlugin(),
         listsPlugin(),
