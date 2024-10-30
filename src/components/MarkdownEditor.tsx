@@ -9,7 +9,6 @@ import {
 
 export const MarkdownEditor = () => {
   const { selectedNote } = useMarkdownEditor();
-
   if (!selectedNote) return null;
   return (
     <MDXEditor

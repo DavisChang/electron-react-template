@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/electron-vite.animate.svg";
 import Btn from "components/Btn.tsx";
@@ -7,16 +7,25 @@ import { formatDateFromMs } from "@/utils/formatDate";
 import { MarkdownEditor } from "./components/MarkdownEditor";
 import { FloatingNoteTitle } from "./components/FloatingNoteTitle";
 import { PreviewList } from "./components/SideBar/PreviewList";
+import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
 
 function App() {
+  const contentContainerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
 
+  const scrollToTop = () => {
+    contentContainerRef.current?.scrollTo(0, 0);
+  };
   return (
     <RootLayout>
       <Sidebar className="p-2">
-        <PreviewList className="mt-3 space-y-1" />
+        <ActionButtonsRow className="flex justify-between mt-1" />
+        <PreviewList className="mt-3 space-y-1" onSelect={scrollToTop} />
       </Sidebar>
-      <Content className="border-l bg-zinc-900/50 border-l-white/20 ">
+      <Content
+        ref={contentContainerRef}
+        className="border-l bg-zinc-900/50 border-l-white/20 "
+      >
         <FloatingNoteTitle />
         <div>
           <div className="flex justify-center m-4">
