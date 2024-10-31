@@ -4,3 +4,5 @@ export type NoteInfo = {
 };
 
 export type NoteContent = string;
+
+export type GetNotes = () => Promise<NoteInfo[]>;
