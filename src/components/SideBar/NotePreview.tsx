@@ -28,6 +28,7 @@ export const NotePreview = ({
       {...props}
     >
       <h3 className="mb-1 font-bold truncate text-left">{title}</h3>
+      <div className="mb-1 truncate text-left">{content}</div>
       <span className="inline-block w-full mb-2 text-xs font-light text-left">
         {formatDateFromMs(lastEditTime)}
       </span>

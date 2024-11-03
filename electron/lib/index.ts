@@ -3,12 +3,15 @@
  * create a folder at your home path
  * cd ~ && mkdir NoteMarkdown
  */
-import { appDirectoryName, fileEncoding } from "@/shared/constants";
-import { GetNotes, NoteInfo } from "@/shared/types";
-import { ensureDir, readdir, stat } from "fs-extra";
+import { GetNotes, NoteInfo, ReadNote } from "@/shared/types";
+import { ensureDir, readdir, readFile, stat } from "fs-extra";
 import { homedir } from "os";
 
+const appDirectoryName = "NoteMarkdown";
+const fileEncoding = "utf8";
+
 export const getRootDir = () => {
+  console.log(`${homedir()}/${appDirectoryName}`);
   return `${homedir()}/${appDirectoryName}`;
 };
 
@@ -37,4 +40,10 @@ export const getNoteInfoFromFileName = async (
     title: filename.replace(/\.md$/, ""),
     lastEditTime: fileStats.mtimeMs,
   };
+};
+
+export const readNote: ReadNote = async (filename) => {
+  const rootDir = getRootDir();
+
+  return readFile(`${rootDir}/${filename}.md`, { encoding: fileEncoding });
 };

@@ -16,6 +16,8 @@ export const PreviewList = ({
     onSelect,
   });
 
+  if (!notes) return null;
+
   if (notes.length === 0) {
     return (
       <ul className={twMerge("text-center pt-4", className)} {...props}>
