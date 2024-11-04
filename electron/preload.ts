@@ -27,7 +27,6 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
 });
 
 try {
-  console.log("[1]");
   contextBridge.exposeInMainWorld("context", {
     locate: navigator.language,
     getNotes: (...args: Parameters<GetNotes>) =>
