@@ -1,4 +1,4 @@
-import { GetNotes, ReadNote } from "./types";
+import { GetNotes, ReadNote, WriteNote } from "./types";
 
 declare global {
   interface Window {
@@ -7,6 +7,7 @@ declare global {
       locate?: string;
       getNotes: GetNotes;
       readNote: ReadNote;
+      writeNote: WriteNote;
     };
   }
 }

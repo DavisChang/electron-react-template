@@ -1,4 +1,4 @@
-import { NoteInfo } from "@/shared/types";
+import { NoteContent, NoteInfo } from "@/shared/types";
 import { atom } from "jotai";
 import { unwrap } from "jotai/utils";
 
@@ -42,6 +42,34 @@ export const selectedNoteAtom = unwrap(
       content: "",
       lastEditTime: Date.now(),
     }
+);
+
+export const saveNoteAtom = atom(
+  null,
+  async (get, set, newContent: NoteContent) => {
+    const notes = get(notesAtom);
+    const selectedNote = get(selectedNoteAtom);
+
+    if (!selectedNote || !notes) return;
+
+    // Save on disk
+    await window.context.writeNote(selectedNote.title, newContent);
+
+    // Find the index of the note to update
+    const noteIndex = notes.findIndex(
+      (note) => note.title === selectedNote.title
+    );
+
+    if (noteIndex !== -1) {
+      // Update the note's last edit time
+      const updatedNotes = [...notes];
+      updatedNotes[noteIndex] = {
+        ...notes[noteIndex],
+        lastEditTime: Date.now(),
+      };
+      set(notesAtom, updatedNotes);
+    }
+  }
 );
 
 export const createEmptyNoteAtom = atom(null, (get, set) => {

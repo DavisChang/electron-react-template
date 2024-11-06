@@ -8,13 +8,16 @@ import {
 } from "@mdxeditor/editor";
 
 export const MarkdownEditor = () => {
-  const { selectedNote } = useMarkdownEditor();
-  console.log("selectedNote:", selectedNote);
+  const { editorRef, handleAutoSaving, selectedNote, handleBlur } =
+    useMarkdownEditor();
   if (!selectedNote) return null;
   return (
     <MDXEditor
+      ref={editorRef}
       key={selectedNote.title}
       markdown={selectedNote.content}
+      onChange={handleAutoSaving}
+      onBlur={handleBlur}
       plugins={[
         headingsPlugin(),
         listsPlugin(),

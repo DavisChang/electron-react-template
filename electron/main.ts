@@ -1,8 +1,8 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { getNotes, readNote } from "./lib";
-import { GetNotes, ReadNote } from "@/shared/types";
+import { getNotes, readNote, writeNote } from "./lib";
+import { GetNotes, ReadNote, WriteNote } from "@/shared/types";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -38,6 +38,9 @@ function createWindow() {
   );
   ipcMain.handle("readNote", (_, ...args: Parameters<ReadNote>) =>
     readNote(...args)
+  );
+  ipcMain.handle("writeNote", (_, ...args: Parameters<WriteNote>) =>
+    writeNote(...args)
   );
 
   win = new BrowserWindow({
