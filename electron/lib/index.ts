@@ -20,8 +20,10 @@ import {
   stat,
   writeFile,
 } from "fs-extra";
+import { isEmpty } from "lodash";
 import { homedir } from "os";
 import path from "path";
+import welcomeNoteFile from "../../resources/welcomeNote.md?raw";
 
 const appDirectoryName = "NoteMarkdown";
 const fileEncoding = "utf8";
@@ -43,6 +45,17 @@ export const getNotes: GetNotes = async () => {
   });
 
   const notes = notesFileNames.filter((fileName) => fileName.endsWith(".md"));
+
+  if (isEmpty(notes)) {
+    console.info("No notes found, creating a welcome note");
+
+    // create the welcome note
+    await writeFile(`${rootDir}/Welcome.md`, welcomeNoteFile, {
+      encoding: fileEncoding,
+    });
+
+    notes.push("Welcome.md");
+  }
 
   return Promise.all(notes.map(getNoteInfoFromFileName));
 };
