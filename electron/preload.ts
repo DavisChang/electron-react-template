@@ -1,5 +1,11 @@
 import { ipcRenderer, contextBridge } from "electron";
-import { CreateNote, GetNotes, ReadNote, WriteNote } from "@/shared/types";
+import {
+  CreateNote,
+  DeleteNote,
+  GetNotes,
+  ReadNote,
+  WriteNote,
+} from "@/shared/types";
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld("ipcRenderer", {
@@ -37,6 +43,8 @@ try {
       ipcRenderer.invoke("writeNote", ...args),
     createNote: (...args: Parameters<CreateNote>) =>
       ipcRenderer.invoke("createNote", ...args),
+    deleteNote: (...args: Parameters<DeleteNote>) =>
+      ipcRenderer.invoke("deleteNote", ...args),
   });
 } catch (error) {
   console.error("ContextBridge, context");
