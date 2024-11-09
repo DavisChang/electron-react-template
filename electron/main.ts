@@ -37,8 +37,7 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 
 let win: BrowserWindow | null;
 
-function createWindow() {
-  console.log("[2]");
+export function registerIpcHandlers() {
   ipcMain.handle("getNotes", (_, ...args: Parameters<GetNotes>) =>
     getNotes(...args)
   );
@@ -54,7 +53,12 @@ function createWindow() {
   ipcMain.handle("deleteNote", (_, ...args: Parameters<DeleteNote>) =>
     deleteNote(...args)
   );
+}
 
+// Register IPC handlers
+registerIpcHandlers();
+
+function createWindow() {
   win = new BrowserWindow({
     title: "This is vite application",
     icon: path.join(process.env.VITE_PUBLIC || "", "electron-vite.svg"),
