@@ -1,7 +1,8 @@
 // @see - https://www.electron.build/configuration
+
 {
   $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  appId: "YourAppID",
+  appId: "com.example.yourapp",
   asar: true,
   productName: "YourAppName",
   directories: {
@@ -26,6 +27,8 @@
     perMachine: false,
     allowToChangeInstallationDirectory: true,
     deleteAppDataOnUninstall: false,
+    menuCategory: "Your App Category",
+    shortcutName: "YourAppName",
   },
   linux: {
     target: ["AppImage"],
