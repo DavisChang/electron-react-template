@@ -2,6 +2,7 @@ import { ipcRenderer, contextBridge } from "electron";
 import {
   CreateNote,
   DeleteNote,
+  GetDeviceInfo,
   GetNotes,
   ReadNote,
   WriteNote,
@@ -35,6 +36,10 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
 try {
   contextBridge.exposeInMainWorld("context", {
     locate: navigator.language,
+    electron: () => process.versions.electron,
+    chrome: () => process.versions.chrome,
+    getDeviceInfo: (...args: Parameters<GetDeviceInfo>) =>
+      ipcRenderer.invoke("getDeviceInfo", ...args),
     getNotes: (...args: Parameters<GetNotes>) =>
       ipcRenderer.invoke("getNotes", ...args),
     readNote: (...args: Parameters<ReadNote>) =>

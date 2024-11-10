@@ -6,6 +6,7 @@
 import {
   CreateNote,
   DeleteNote,
+  GetDeviceInfo,
   GetNotes,
   NoteInfo,
   ReadNote,
@@ -21,7 +22,7 @@ import {
   writeFile,
 } from "fs-extra";
 import { isEmpty } from "lodash";
-import { homedir } from "os";
+import { homedir, platform } from "os";
 import path from "path";
 import welcomeNoteFile from "../../resources/welcomeNote.md?raw";
 
@@ -142,4 +143,8 @@ export const deleteNote: DeleteNote = async (filename) => {
   console.info(`Deleting note: ${filename}`);
   await remove(`${rootDir}/${filename}.md`);
   return true;
+};
+
+export const getDeviceInfo: GetDeviceInfo = async () => {
+  return { platform: platform() };
 };

@@ -1,10 +1,18 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import { createNote, deleteNote, getNotes, readNote, writeNote } from "./lib";
+import {
+  createNote,
+  deleteNote,
+  getDeviceInfo,
+  getNotes,
+  readNote,
+  writeNote,
+} from "./lib";
 import {
   CreateNote,
   DeleteNote,
+  GetDeviceInfo,
   GetNotes,
   ReadNote,
   WriteNote,
@@ -52,6 +60,9 @@ export function registerIpcHandlers() {
   );
   ipcMain.handle("deleteNote", (_, ...args: Parameters<DeleteNote>) =>
     deleteNote(...args)
+  );
+  ipcMain.handle("getDeviceInfo", (_, ...args: Parameters<GetDeviceInfo>) =>
+    getDeviceInfo(...args)
   );
 }
 

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/electron-vite.animate.svg";
 import Btn from "components/Btn.tsx";
@@ -8,14 +8,25 @@ import { MarkdownEditor } from "./components/MarkdownEditor";
 import { FloatingNoteTitle } from "./components/FloatingNoteTitle";
 import { PreviewList } from "./components/SideBar/PreviewList";
 import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
+import { DeviceInfo } from "./shared/types";
 
 function App() {
   const contentContainerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
+  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>();
 
   const scrollToTop = () => {
     contentContainerRef.current?.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    const getDeviceInfo = async () => {
+      const info: DeviceInfo = await window.context.getDeviceInfo();
+      setDeviceInfo(info);
+    };
+    getDeviceInfo();
+  }, [setDeviceInfo]);
+
   return (
     <RootLayout>
       <Sidebar className="p-2">
@@ -47,6 +58,19 @@ function App() {
             <p>
               Edit <code>src/App.tsx</code> and save to test HMR
             </p>
+
+            <p className="text-base text-slate-900 font-semibold dark:text-slate-300">
+              Chrome Version: <code>{window.context.chrome()}</code>
+            </p>
+            <p className="text-base text-slate-900 font-semibold dark:text-slate-300">
+              Electron Version: <code>{window.context.electron()}</code>
+            </p>
+
+            <p className="text-base text-slate-900 font-semibold dark:text-slate-300">
+              Device:
+              <code>{JSON.stringify(deviceInfo)}</code>
+            </p>
+
             <Btn />
           </div>
           <p>Click on the Vite and React logos to learn more</p>
