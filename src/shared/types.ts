@@ -19,3 +19,4 @@ export type DeleteNote = (title: NoteInfo["title"]) => Promise<boolean>;
 export type GetDeviceInfo = () => Promise<DeviceInfo>;
 export type ChromeVersion = () => string;
 export type ElectronVersion = () => string;
+export type OpenUrl = (url: string) => void;

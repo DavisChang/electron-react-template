@@ -46,6 +46,14 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
 let win: BrowserWindow | null;
 
 export function registerIpcHandlers() {
+  ipcMain.on("openUrl", (_, url: string) => {
+    const newWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+    });
+    newWindow.loadURL(url);
+  });
+
   ipcMain.handle("getNotes", (_, ...args: Parameters<GetNotes>) =>
     getNotes(...args)
   );

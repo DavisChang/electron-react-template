@@ -5,6 +5,7 @@ import {
   ElectronVersion,
   GetDeviceInfo,
   GetNotes,
+  OpenUrl,
   ReadNote,
   WriteNote,
 } from "./types";
@@ -16,6 +17,7 @@ declare global {
       locate?: string;
       electron: ElectronVersion;
       chrome: ChromeVersion;
+      openUrl: OpenUrl;
       getDeviceInfo: GetDeviceInfo;
       getNotes: GetNotes;
       readNote: ReadNote;

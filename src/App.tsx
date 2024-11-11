@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/electron-vite.animate.svg";
-import Btn from "components/Btn.tsx";
+import InputArea from "components/InputArea.tsx";
 import { RootLayout, Sidebar, Content } from "@/components/AppLayout";
 import { formatDateFromMs } from "@/utils/formatDate";
 import { MarkdownEditor } from "./components/MarkdownEditor";
@@ -51,8 +51,12 @@ function App() {
           <h1 className="text-3xl font-bold underline">
             Electron with Vite + React {formatDateFromMs(Date.now())}
           </h1>
+          <p>Click on the Vite and React logos to learn more</p>
           <div>
-            <button onClick={() => setCount((count) => count + 1)}>
+            <button
+              className="mx-4 my-4 bg-transparent dark:bg-white/5"
+              onClick={() => setCount((count) => count + 1)}
+            >
               count is {count}
             </button>
             <p>
@@ -71,11 +75,11 @@ function App() {
               <code>{JSON.stringify(deviceInfo)}</code>
             </p>
 
-            <Btn />
+            <InputArea />
           </div>
-          <p>Click on the Vite and React logos to learn more</p>
-
+          <hr />
           <div>
+            <h2 className="my-3 text-3xl font-bold">MarkdownEditor</h2>
             <MarkdownEditor />
           </div>
         </div>

@@ -38,6 +38,7 @@ try {
     locate: navigator.language,
     electron: () => process.versions.electron,
     chrome: () => process.versions.chrome,
+    openUrl: (url: string) => ipcRenderer.send("openUrl", url),
     getDeviceInfo: (...args: Parameters<GetDeviceInfo>) =>
       ipcRenderer.invoke("getDeviceInfo", ...args),
     getNotes: (...args: Parameters<GetNotes>) =>
