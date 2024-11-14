@@ -14,10 +14,17 @@ function App() {
   const contentContainerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>();
+  const [updateMessage, setUpdateMessage] = useState("");
 
   const scrollToTop = () => {
     contentContainerRef.current?.scrollTo(0, 0);
   };
+
+  useEffect(() => {
+    window.ipcRenderer.on("onUpdateMessage", (_event, message) => {
+      setUpdateMessage(message);
+    });
+  }, []);
 
   useEffect(() => {
     const getDeviceInfo = async () => {
@@ -73,6 +80,11 @@ function App() {
             <p className="text-base text-slate-900 font-semibold dark:text-slate-300">
               Device:
               <code>{JSON.stringify(deviceInfo)}</code>
+            </p>
+
+            <p className="text-base text-slate-900 font-semibold dark:text-slate-300">
+              Update Message:
+              <code>{updateMessage}</code>
             </p>
 
             <InputArea />

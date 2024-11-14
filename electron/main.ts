@@ -17,6 +17,11 @@ import {
   ReadNote,
   WriteNote,
 } from "@/shared/types";
+import { autoUpdater } from "electron-updater";
+
+// basic flags
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -91,6 +96,9 @@ function createWindow() {
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
+
+    autoUpdater.checkForUpdates();
+    win?.webContents.send("onUpdateMessage", "Checking for updates");
   });
 
   if (VITE_DEV_SERVER_URL) {
@@ -124,4 +132,28 @@ app.on("activate", () => {
   }
 });
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
+});
+
+autoUpdater.on("update-available", (info) => {
+  win?.webContents.send("onUpdateMessage", "Update Available");
+  const path = autoUpdater.downloadUpdate();
+  console.log("[update-available]:", { path, info });
+  win?.webContents.send("onUpdateMessage", path);
+});
+
+autoUpdater.on("update-not-available", (info) => {
+  win?.webContents.send("onUpdateMessage", "Update Not Available");
+  console.log("[update-not-available]:", info);
+});
+
+autoUpdater.on("update-downloaded", (info) => {
+  win?.webContents.send("onUpdateMessage", "Update Downloaded");
+  console.log("[update-downloaded]:", info);
+});
+
+autoUpdater.on("error", (info) => {
+  win?.webContents.send("onUpdateMessage", info);
+  console.log("[error]:", info);
+});
