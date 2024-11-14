@@ -1,7 +1,7 @@
 {
   "name": "electron-vite-project",
   "private": true,
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "author": "Davis Chang",
   "repository": "https://github.com/DavisChang/electron-react-template-autoupdater",
@@ -18,7 +18,8 @@
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "npm run lint && npm run typecheck:web && npm run typecheck:node && npm run build",
+    "test": "npm run lint && npm run typecheck:web && npm run typecheck:node",
+    "test:build": "npm run lint && npm run typecheck:web && npm run typecheck:node && npm run build",
     "typecheck:web": "tsc --noEmit -p tsconfig.json --composite false",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false"
   },

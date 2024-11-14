@@ -11,6 +11,8 @@
   files: ["dist", "dist-electron"],
   mac: {
     target: ["dmg", "zip"],
+    identity: null, // Disable code signing
+    hardenedRuntime: false, // Disable hardened runtime
     artifactName: "${productName}-Mac-${version}-Installer.${ext}",
   },
   win: {
