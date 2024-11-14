@@ -1,4 +1,10 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  MessageBoxOptions,
+} from "electron";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import {
@@ -97,8 +103,12 @@ function createWindow() {
   win.webContents.on("did-finish-load", () => {
     win?.webContents.send("main-process-message", new Date().toLocaleString());
 
+    // Check for updates as soon as the window loads
     autoUpdater.checkForUpdates();
-    win?.webContents.send("onUpdateMessage", "Checking for updates");
+    win?.webContents.send(
+      "onUpdateMessage",
+      `V.${app.getVersion()} - Checking for updates`
+    );
   });
 
   if (VITE_DEV_SERVER_URL) {
@@ -112,6 +122,9 @@ function createWindow() {
   if (MAIN_VITE_OPEN_DEV_TOOLS) {
     win.webContents.openDevTools();
   }
+
+  // Set up auto-update events
+  setupAutoUpdater();
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -132,28 +145,58 @@ app.on("activate", () => {
   }
 });
 
-app.whenReady().then(() => {
-  createWindow();
-});
+app.whenReady().then(createWindow);
 
-autoUpdater.on("update-available", (info) => {
-  win?.webContents.send("onUpdateMessage", "Update Available");
-  const path = autoUpdater.downloadUpdate();
-  console.log("[update-available]:", { path, info });
-  win?.webContents.send("onUpdateMessage", path);
-});
+function setupAutoUpdater() {
+  // Listen for update events
+  autoUpdater.on("update-available", () => {
+    win?.webContents.send(
+      "onUpdateMessage",
+      "Update available. Downloading..."
+    );
+    const dialogOpts: MessageBoxOptions = {
+      type: "info",
+      buttons: ["Download Now", "Later"],
+      title: "Application Update",
+      message: "A new version is available. Would you like to download it?",
+    };
 
-autoUpdater.on("update-not-available", (info) => {
-  win?.webContents.send("onUpdateMessage", "Update Not Available");
-  console.log("[update-not-available]:", info);
-});
+    dialog.showMessageBox(win as BrowserWindow, dialogOpts).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.downloadUpdate();
+      }
+    });
+  });
 
-autoUpdater.on("update-downloaded", (info) => {
-  win?.webContents.send("onUpdateMessage", "Update Downloaded");
-  console.log("[update-downloaded]:", info);
-});
+  autoUpdater.on("update-not-available", () => {
+    win?.webContents.send("onUpdateMessage", "No updates available.");
+  });
 
-autoUpdater.on("error", (info) => {
-  win?.webContents.send("onUpdateMessage", info);
-  console.log("[error]:", info);
-});
+  autoUpdater.on("download-progress", (progress) => {
+    const message = `Download speed: ${Math.round(
+      progress.bytesPerSecond / 1024
+    )} KB/s\nDownloaded ${Math.round(progress.percent)}%`;
+    win?.webContents.send("onUpdateMessage", message);
+  });
+
+  autoUpdater.on("update-downloaded", () => {
+    win?.webContents.send("onUpdateMessage", "Update downloaded.");
+    const dialogOpts: MessageBoxOptions = {
+      type: "info",
+      buttons: ["Restart", "Later"],
+      title: "Application Update",
+      message:
+        "A new version has been downloaded. Restart the application to apply the updates.",
+    };
+
+    dialog.showMessageBox(win as BrowserWindow, dialogOpts).then((result) => {
+      if (result.response === 0) {
+        autoUpdater.quitAndInstall();
+      }
+    });
+  });
+
+  autoUpdater.on("error", (error) => {
+    win?.webContents.send("onUpdateMessage", `Error: ${error}`);
+  });
+}
