@@ -8,6 +8,7 @@ import {
   OpenUrl,
   ReadNote,
   WriteNote,
+  SubscribeSomeData,
 } from "./types";
 
 declare global {
@@ -17,6 +18,7 @@ declare global {
       locate?: string;
       electron: ElectronVersion;
       chrome: ChromeVersion;
+      subscribeSomeData: SubscribeSomeData; // example ipcRenderer.on
       openUrl: OpenUrl;
       getDeviceInfo: GetDeviceInfo;
       getNotes: GetNotes;

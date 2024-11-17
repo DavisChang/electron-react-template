@@ -5,32 +5,44 @@ import {
   GetDeviceInfo,
   GetNotes,
   ReadNote,
+  SubscribeSomeData,
   WriteNote,
 } from "@/shared/types";
 
 // --------- Expose some API to the Renderer process ---------
+const allowedChannels = ["onUpdateMessage", "main-process-message"];
+
 contextBridge.exposeInMainWorld("ipcRenderer", {
   on(...args: Parameters<typeof ipcRenderer.on>) {
     const [channel, listener] = args;
+    if (!allowedChannels.includes(channel)) {
+      throw new Error(`Channel "${channel}" is not allowed.`);
+    }
     return ipcRenderer.on(channel, (event, ...args) =>
       listener(event, ...args)
     );
   },
   off(...args: Parameters<typeof ipcRenderer.off>) {
     const [channel, ...omit] = args;
+    if (!allowedChannels.includes(channel)) {
+      throw new Error(`Channel "${channel}" is not allowed.`);
+    }
     return ipcRenderer.off(channel, ...omit);
   },
   send(...args: Parameters<typeof ipcRenderer.send>) {
     const [channel, ...omit] = args;
+    if (!allowedChannels.includes(channel)) {
+      throw new Error(`Channel "${channel}" is not allowed.`);
+    }
     return ipcRenderer.send(channel, ...omit);
   },
   invoke(...args: Parameters<typeof ipcRenderer.invoke>) {
     const [channel, ...omit] = args;
+    if (!allowedChannels.includes(channel)) {
+      throw new Error(`Channel "${channel}" is not allowed.`);
+    }
     return ipcRenderer.invoke(channel, ...omit);
   },
-
-  // You can expose other APTs you need here.
-  // ...
 });
 
 try {
@@ -38,6 +50,12 @@ try {
     locate: navigator.language,
     electron: () => process.versions.electron,
     chrome: () => process.versions.chrome,
+
+    // example ipcRenderer.on
+    subscribeSomeData: (callback: SubscribeSomeData) =>
+      ipcRenderer.on("some-data", (_, data) => {
+        callback(data);
+      }),
     openUrl: (url: string) => ipcRenderer.send("openUrl", url),
     getDeviceInfo: (...args: Parameters<GetDeviceInfo>) =>
       ipcRenderer.invoke("getDeviceInfo", ...args),

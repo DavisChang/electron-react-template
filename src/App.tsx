@@ -8,7 +8,7 @@ import { MarkdownEditor } from "./components/MarkdownEditor";
 import { FloatingNoteTitle } from "./components/FloatingNoteTitle";
 import { PreviewList } from "./components/SideBar/PreviewList";
 import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
-import { DeviceInfo } from "./shared/types";
+import { DeviceInfo, Statistics } from "./shared/types";
 
 function App() {
   const contentContainerRef = useRef<HTMLDivElement>(null);
@@ -23,6 +23,11 @@ function App() {
   useEffect(() => {
     window.ipcRenderer.on("onUpdateMessage", (_event, message) => {
       setUpdateMessage(message);
+    });
+
+    // example ipcRenderer.on
+    window.context.subscribeSomeData((data: Statistics) => {
+      console.log(data);
     });
   }, []);
 
