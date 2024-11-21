@@ -23,7 +23,7 @@ import {
 } from "fs-extra";
 import { isEmpty } from "lodash";
 import { homedir, platform } from "os";
-import path from "path";
+import path, { join } from "path";
 import welcomeNoteFile from "../../resources/welcomeNote.md?raw";
 
 const appDirectoryName = "NoteMarkdown";
@@ -31,7 +31,7 @@ const fileEncoding = "utf8";
 
 export const getRootDir = () => {
   console.log(`${homedir()}/${appDirectoryName}`);
-  return `${homedir()}/${appDirectoryName}`;
+  return join(homedir(), appDirectoryName);
 };
 
 export const getNotes: GetNotes = async () => {
