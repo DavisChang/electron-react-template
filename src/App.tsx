@@ -66,6 +66,7 @@ function App() {
           <p>Click on the Vite and React logos to learn more</p>
           <div>
             <button
+              data-testid="count"
               className="mx-4 my-4 bg-transparent dark:bg-white/5"
               onClick={() => setCount((count) => count + 1)}
             >

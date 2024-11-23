@@ -44,8 +44,6 @@ process.env.APP_ROOT = path.join(__dirname, "..");
 
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 
-export const MAIN_VITE_OPEN_DEV_TOOLS =
-  process.env.MAIN_VITE_OPEN_DEV_TOOLS || false;
 export const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
@@ -119,9 +117,7 @@ function createWindow() {
   }
 
   // Dev Tools
-  if (MAIN_VITE_OPEN_DEV_TOOLS) {
-    win.webContents.openDevTools();
-  }
+  // win.webContents.openDevTools();
 
   // Set up auto-update events
   setupAutoUpdater();
