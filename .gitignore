@@ -35,3 +35,5 @@ dist-electron/
 /playwright/.cache/
 
 e2e-result/
+
+coverage/
