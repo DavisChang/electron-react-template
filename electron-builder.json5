@@ -13,6 +13,7 @@
     target: ["dmg", "zip"],
     identity: null, // Disable code signing
     hardenedRuntime: false, // Disable hardened runtime
+    icon: "public/assets/icons/icon.icns",
     artifactName: "${productName}-Mac-${version}-Installer.${ext}",
   },
   win: {
@@ -21,7 +22,12 @@
         target: "nsis",
         arch: ["x64"],
       },
+      {
+        target: "msi",
+        arch: ["x64"],
+      },
     ],
+    icon: "public/assets/icons/icon.ico",
     artifactName: "${productName}-Windows-${version}-Setup.${ext}",
   },
   nsis: {
