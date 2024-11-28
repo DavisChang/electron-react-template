@@ -7,7 +7,7 @@ import {
   quotePlugin,
 } from "@mdxeditor/editor";
 
-export const MarkdownEditor = () => {
+const MarkdownEditor = () => {
   const { editorRef, handleAutoSaving, selectedNote, handleBlur } =
     useMarkdownEditor();
   if (!selectedNote) return null;
@@ -28,3 +28,5 @@ export const MarkdownEditor = () => {
     />
   );
 };
+
+export default MarkdownEditor;

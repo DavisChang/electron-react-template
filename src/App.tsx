@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/electron-vite.animate.svg";
 import InputArea from "components/InputArea.tsx";
 import { RootLayout, Sidebar, Content } from "@/components/AppLayout";
 import { formatDateFromMs } from "@/utils/formatDate";
-import { MarkdownEditor } from "./components/MarkdownEditor";
+
 import { FloatingNoteTitle } from "./components/FloatingNoteTitle";
 import { PreviewList } from "./components/SideBar/PreviewList";
 import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
 import { DeviceInfo, Statistics } from "./shared/types";
+const MarkdownEditor = React.lazy(() => import("./components/MarkdownEditor"));
 
 function App() {
   const contentContainerRef = useRef<HTMLDivElement>(null);
@@ -98,7 +99,9 @@ function App() {
           <hr />
           <div>
             <h2 className="my-3 text-3xl font-bold">MarkdownEditor</h2>
-            <MarkdownEditor />
+            <Suspense fallback={<div>Loading...</div>}>
+              <MarkdownEditor />
+            </Suspense>
           </div>
         </div>
       </Content>
