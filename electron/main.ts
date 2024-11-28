@@ -24,6 +24,7 @@ import {
   WriteNote,
 } from "@/shared/types";
 import { autoUpdater } from "electron-updater";
+import dns from "dns";
 
 // basic flags
 autoUpdater.autoDownload = false;
@@ -237,3 +238,23 @@ function setupAutoUpdater() {
     win?.webContents.send("onUpdateMessage", `Error: ${error}`);
   });
 }
+
+// check internet
+let lastStatus: boolean = true;
+
+function checkInternetConnection(): void {
+  dns.lookup("google.com", (err: NodeJS.ErrnoException | null) => {
+    const isOnline = !err;
+    if (isOnline !== lastStatus) {
+      lastStatus = isOnline;
+      const message = isOnline ? "You are now online." : "You are offline.";
+      dialog.showMessageBox({
+        type: "info",
+        title: "Network Status",
+        message,
+      });
+    }
+  });
+}
+
+setInterval(checkInternetConnection, 5000);
