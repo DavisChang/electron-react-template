@@ -141,7 +141,48 @@ app.on("activate", () => {
   }
 });
 
-app.whenReady().then(createWindow);
+// Deep Links
+if (process.defaultApp) {
+  if (process.argv.length >= 2) {
+    app.setAsDefaultProtocolClient("electron-template", process.execPath, [
+      path.resolve(process.argv[1]),
+    ]);
+  }
+} else {
+  app.setAsDefaultProtocolClient("electron-template");
+}
+
+/**
+ * Deep Links
+ * Handle the protocol. In this case, we choose to show an Error Box.
+ */
+
+// Windows and Linux code:
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on("second-instance", (_, commandLine) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (win) {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+    }
+    // the commandLine is array of strings in which last element is deep link url
+    dialog.showErrorBox(
+      "Welcome Back",
+      `You arrived from: ${commandLine.pop()}`
+    );
+  });
+
+  // Create mainWindow, load the rest of the app, etc...
+  app.whenReady().then(createWindow);
+
+  // MacOS code
+  app.on("open-url", (_, url) => {
+    dialog.showErrorBox("Welcome Back", `You arrived from: ${url}`);
+  });
+}
 
 function setupAutoUpdater() {
   // Listen for update events
