@@ -4,13 +4,18 @@ import {
   DeleteNote,
   GetDeviceInfo,
   GetNotes,
+  Note,
   ReadNote,
   SubscribeSomeData,
   WriteNote,
 } from "@/shared/types";
 
 // --------- Expose some API to the Renderer process ---------
-const allowedChannels = ["onUpdateMessage", "main-process-message"];
+const allowedChannels = [
+  "onUpdateMessage",
+  "main-process-message",
+  "secondary-process-message",
+];
 
 contextBridge.exposeInMainWorld("ipcRenderer", {
   on(...args: Parameters<typeof ipcRenderer.on>) {
@@ -57,8 +62,8 @@ try {
         callback(data);
       }),
     openUrl: (url: string) => ipcRenderer.send("openUrl", url),
-    openSecondaryWindow: (filename: string) =>
-      ipcRenderer.send("openSecondaryWindow", filename),
+    openSecondaryWindow: (note: Note) =>
+      ipcRenderer.send("openSecondaryWindow", note),
     getDeviceInfo: (...args: Parameters<GetDeviceInfo>) =>
       ipcRenderer.invoke("getDeviceInfo", ...args),
     getNotes: (...args: Parameters<GetNotes>) =>

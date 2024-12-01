@@ -1,7 +1,7 @@
 {
   "name": "electron-vite-project",
   "private": true,
-  "version": "0.0.5",
+  "version": "0.0.6",
   "type": "module",
   "author": "Davis Chang",
   "repository": "https://github.com/DavisChang/electron-react-template-autoupdater",
@@ -30,6 +30,7 @@
     "@mdxeditor/editor": "^3.14.0",
     "electron-updater": "^6.3.9",
     "fs-extra": "^11.2.0",
+    "html2pdf.js": "^0.10.2",
     "jotai": "^2.10.1",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",

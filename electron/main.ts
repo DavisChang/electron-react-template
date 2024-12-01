@@ -11,6 +11,7 @@ import { registerIpcHandlers } from "./ipc/registerIpcHandlers";
 import { autoUpdater } from "electron-updater";
 import { checkInternetConnection } from "./lib/internet";
 import { createSecondaryWindow } from "./windows/secondaryWindow";
+import { Note } from "@/shared/types";
 
 // basic flags
 autoUpdater.autoDownload = false;
@@ -106,10 +107,9 @@ app.on("activate", () => {
 });
 
 // Handle request to open a secondary window
-ipcMain.on("openSecondaryWindow", (_, filename: string) => {
-  console.log("[openSecondaryWindow] filename:", filename);
+ipcMain.on("openSecondaryWindow", (_, note: Note) => {
   if (mainWindow) {
-    createSecondaryWindow(mainWindow, RENDERER_DIST);
+    createSecondaryWindow(mainWindow, RENDERER_DIST, note);
   }
 });
 

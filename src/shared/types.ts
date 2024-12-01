@@ -8,6 +8,11 @@ export type DeviceInfo = {
 };
 
 export type NoteContent = string;
+
+export type Note = NoteInfo & {
+  content: NoteContent;
+};
+
 export type GetNotes = () => Promise<NoteInfo[]>;
 export type ReadNote = (title: NoteInfo["title"]) => Promise<NoteContent>;
 export type WriteNote = (
@@ -20,7 +25,7 @@ export type GetDeviceInfo = () => Promise<DeviceInfo>;
 export type ChromeVersion = () => string;
 export type ElectronVersion = () => string;
 export type OpenUrl = (url: string) => void;
-export type OpenSecondaryWindow = (filename: string) => void;
+export type OpenSecondaryWindow = (note: Note) => void;
 
 // example ipcRenderer.on
 export type Statistics = {

@@ -1,4 +1,10 @@
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/electron-vite.animate.svg";
 import InputArea from "components/InputArea.tsx";
@@ -9,6 +15,7 @@ import { FloatingNoteTitle } from "./components/FloatingNoteTitle";
 import { PreviewList } from "./components/SideBar/PreviewList";
 import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
 import { DeviceInfo, Statistics } from "./shared/types";
+import { useMarkdownEditor } from "./hooks/useMarkdownEditor";
 const MarkdownEditor = React.lazy(() => import("./components/MarkdownEditor"));
 
 function App() {
@@ -16,6 +23,8 @@ function App() {
   const [count, setCount] = useState(0);
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>();
   const [updateMessage, setUpdateMessage] = useState("");
+
+  const { selectedNote } = useMarkdownEditor();
 
   const scrollToTop = () => {
     contentContainerRef.current?.scrollTo(0, 0);
@@ -40,9 +49,12 @@ function App() {
     getDeviceInfo();
   }, [setDeviceInfo]);
 
-  const onClickOpenSecondaryWindow = () => {
-    window.context.openSecondaryWindow("filename");
-  };
+  const onClickOpenSecondaryWindow = useCallback(() => {
+    if (selectedNote) {
+      window.context.openSecondaryWindow(selectedNote);
+    }
+  }, [selectedNote]);
+
   return (
     <RootLayout>
       <Sidebar className="p-2">
