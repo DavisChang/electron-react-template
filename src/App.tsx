@@ -40,6 +40,9 @@ function App() {
     getDeviceInfo();
   }, [setDeviceInfo]);
 
+  const onClickOpenSecondaryWindow = () => {
+    window.context.openSecondaryWindow("filename");
+  };
   return (
     <RootLayout>
       <Sidebar className="p-2">
@@ -99,6 +102,15 @@ function App() {
           <hr />
           <div>
             <h2 className="my-3 text-3xl font-bold">MarkdownEditor</h2>
+
+            <button
+              data-testid="count"
+              className="mx-4 my-4 bg-transparent dark:bg-white/5"
+              onClick={onClickOpenSecondaryWindow}
+            >
+              openSecondaryWindow
+            </button>
+
             <Suspense fallback={<div>Loading...</div>}>
               <MarkdownEditor />
             </Suspense>

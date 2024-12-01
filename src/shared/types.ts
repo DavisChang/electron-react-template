@@ -20,6 +20,7 @@ export type GetDeviceInfo = () => Promise<DeviceInfo>;
 export type ChromeVersion = () => string;
 export type ElectronVersion = () => string;
 export type OpenUrl = (url: string) => void;
+export type OpenSecondaryWindow = (filename: string) => void;
 
 // example ipcRenderer.on
 export type Statistics = {

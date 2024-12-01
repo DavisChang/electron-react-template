@@ -57,6 +57,8 @@ try {
         callback(data);
       }),
     openUrl: (url: string) => ipcRenderer.send("openUrl", url),
+    openSecondaryWindow: (filename: string) =>
+      ipcRenderer.send("openSecondaryWindow", filename),
     getDeviceInfo: (...args: Parameters<GetDeviceInfo>) =>
       ipcRenderer.invoke("getDeviceInfo", ...args),
     getNotes: (...args: Parameters<GetNotes>) =>

@@ -9,6 +9,7 @@ import {
   ReadNote,
   WriteNote,
   SubscribeSomeData,
+  OpenSecondaryWindow,
 } from "./types";
 
 declare global {
@@ -20,6 +21,7 @@ declare global {
       chrome: ChromeVersion;
       subscribeSomeData: SubscribeSomeData; // example ipcRenderer.on
       openUrl: OpenUrl;
+      openSecondaryWindow: OpenSecondaryWindow;
       getDeviceInfo: GetDeviceInfo;
       getNotes: GetNotes;
       readNote: ReadNote;
