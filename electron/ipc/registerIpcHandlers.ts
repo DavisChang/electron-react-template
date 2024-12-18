@@ -25,6 +25,13 @@ export function registerIpcHandlers() {
     newWindow.loadURL(url);
   });
 
+  ipcMain.handle("openDevTool", (event) => {
+    const webContents = event.sender;
+    if (webContents) {
+      webContents.openDevTools();
+    }
+  });
+
   ipcMain.handle("getNotes", (_, ...args: Parameters<GetNotes>) =>
     getNotes(...args)
   );

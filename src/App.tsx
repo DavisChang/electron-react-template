@@ -55,6 +55,9 @@ function App() {
     }
   }, [selectedNote]);
 
+  const openDevTool = () => {
+    window.context.openDevTool();
+  };
   return (
     <RootLayout>
       <Sidebar className="p-2">
@@ -87,6 +90,14 @@ function App() {
               onClick={() => setCount((count) => count + 1)}
             >
               count is {count}
+            </button>
+
+            <button
+              data-testid="count"
+              className="mx-4 my-4 bg-transparent dark:bg-white/5"
+              onClick={openDevTool}
+            >
+              Open Dev Tool
             </button>
             <p>
               Edit <code>src/App.tsx</code> and save to test HMR
