@@ -30,7 +30,7 @@ export const createSecondaryWindow = (
     if (VITE_DEV_SERVER_URL) {
       secondaryWindow.loadURL(path.join(VITE_DEV_SERVER_URL, "secondary.html"));
     } else {
-      secondaryWindow.loadFile(path.join(RENDERER_DIST, "index.html"));
+      secondaryWindow.loadFile(path.join(RENDERER_DIST, "secondary.html"));
     }
 
     secondaryWindow.on("closed", () => {
