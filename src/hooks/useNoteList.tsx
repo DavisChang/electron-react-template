@@ -11,11 +11,11 @@ export const useNotesList = ({ onSelect }: { onSelect?: () => void }) => {
   const handleNoteSelect = (index: number) => async () => {
     console.log("handleNoteSelect:", index);
     setSelectedNoteIndex(index);
-  };
 
-  if (onSelect) {
-    onSelect();
-  }
+    if (onSelect) {
+      onSelect();
+    }
+  };
 
   return {
     notes,

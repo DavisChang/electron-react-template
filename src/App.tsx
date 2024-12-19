@@ -16,6 +16,7 @@ import { PreviewList } from "./components/SideBar/PreviewList";
 import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
 import { DeviceInfo, Statistics } from "./shared/types";
 import { useMarkdownEditor } from "./hooks/useMarkdownEditor";
+import MarkdownWithMath from "./components/MarkdownMathJax/MarkdownWithMath";
 const MarkdownEditor = React.lazy(() => import("./components/MarkdownEditor"));
 
 function App() {
@@ -58,6 +59,7 @@ function App() {
   const openDevTool = () => {
     window.context.openDevTool();
   };
+
   return (
     <RootLayout>
       <Sidebar className="p-2">
@@ -121,6 +123,8 @@ function App() {
             </p>
 
             <InputArea />
+            <hr />
+            <MarkdownWithMath />
           </div>
           <hr />
           <div>
