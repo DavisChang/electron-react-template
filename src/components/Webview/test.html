@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embedded Web Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    button {
+      margin: 10px 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #status {
+      margin-top: 20px;
+      padding: 10px;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Embedded Web Page</h1>
+  <p>This page demonstrates communication between the webview and the Electron app.</p>
+
+  <button id="sendMessage">Send Message to Electron</button>
+
+  <div id="status">Waiting for messages...</div>
+
+  <script>
+    // Send a message to Electron
+    document.getElementById("sendMessage").addEventListener("click", () => {
+      console.log('Send message to Electron');
+      console.log('window.parent: ', window.parent);
+
+      // Alternatively, you can send a message to the parent window using postMessage
+      window.parent.postMessage(
+        { type: "FROM_WEBVIEW", message: "Hello Electron!" },
+        "*"
+      );
+    });
+
+
+    const TRUSTED_ORIGIN = "http://localhost:5173";
+    const TRUSTED_ORIGIN_BUILD = "file://";
+    // Listen for messages from Electron
+    window.addEventListener("message", (event) => {
+      console.log('event.origin:', event.origin);
+
+      if (event.origin === TRUSTED_ORIGIN || event.origin === TRUSTED_ORIGIN_BUILD) {
+        const status = document.getElementById("status");
+        status.textContent = `Received message from Electron(${event.origin}): ${JSON.stringify(event.data)}`;
+         
+      } else {
+        console.warn("Untrusted origin:", event.origin);
+        return;
+      }
+
+      
+    });
+  </script>
+</body>
+</html>

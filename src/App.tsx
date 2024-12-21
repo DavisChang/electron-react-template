@@ -17,6 +17,8 @@ import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
 import { DeviceInfo, Statistics } from "./shared/types";
 import { useMarkdownEditor } from "./hooks/useMarkdownEditor";
 import MarkdownWithMath from "./components/MarkdownMathJax/MarkdownWithMath";
+import IframeComponent from "./components/Webview/IframeWebview";
+
 const MarkdownEditor = React.lazy(() => import("./components/MarkdownEditor"));
 
 function App() {
@@ -125,6 +127,8 @@ function App() {
             <InputArea />
             <hr />
             <MarkdownWithMath />
+            <hr />
+            <IframeComponent />
           </div>
           <hr />
           <div>
