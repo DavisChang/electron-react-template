@@ -62,6 +62,7 @@ try {
         callback(data);
       }),
     openUrl: (url: string) => ipcRenderer.send("openUrl", url),
+    openExternalUrl: (url: string) => ipcRenderer.send("openExternalUrl", url),
     openDevTool: () => ipcRenderer.invoke("openDevTool"),
     openSecondaryWindow: (note: Note) =>
       ipcRenderer.send("openSecondaryWindow", note),

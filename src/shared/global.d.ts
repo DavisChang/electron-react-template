@@ -22,6 +22,7 @@ declare global {
       chrome: ChromeVersion;
       subscribeSomeData: SubscribeSomeData; // example ipcRenderer.on
       openUrl: OpenUrl;
+      openExternalUrl: OpenUrl;
       openDevTool: OpenDevTool;
       openSecondaryWindow: OpenSecondaryWindow;
       getDeviceInfo: GetDeviceInfo;

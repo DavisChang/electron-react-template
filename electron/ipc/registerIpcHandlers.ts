@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from "electron";
+import { BrowserWindow, ipcMain, shell } from "electron";
 import {
   createNote,
   deleteNote,
@@ -23,6 +23,14 @@ export function registerIpcHandlers() {
       height: 600,
     });
     newWindow.loadURL(url);
+  });
+
+  // Handle the external browser opening and simulate monitoring
+  ipcMain.on("openExternalUrl", (_, url) => {
+    console.log("Opening external URL:", url);
+
+    // Open the default browser
+    shell.openExternal(url);
   });
 
   ipcMain.handle("openDevTool", (event) => {
