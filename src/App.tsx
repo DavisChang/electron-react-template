@@ -18,6 +18,7 @@ import { DeviceInfo, Statistics } from "./shared/types";
 import { useMarkdownEditor } from "./hooks/useMarkdownEditor";
 import MarkdownWithMath from "./components/MarkdownMathJax/MarkdownWithMath";
 import IframeComponent from "./components/Webview/IframeWebview";
+import PerformanceDashboard from "./components/Dashboard/PerformanceDashboard";
 
 const MarkdownEditor = React.lazy(() => import("./components/MarkdownEditor"));
 
@@ -124,6 +125,9 @@ function App() {
               <code>{updateMessage}</code>
             </p>
 
+            <hr />
+            <PerformanceDashboard />
+            <hr />
             <InputArea />
             <hr />
             <MarkdownWithMath />

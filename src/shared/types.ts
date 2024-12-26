@@ -35,3 +35,37 @@ export type Statistics = {
   storageUsage: number;
 };
 export type SubscribeSomeData = (callback: (data: Statistics) => void) => void;
+
+export type PerformanceData = {
+  systemMemory: {
+    total: string;
+    free: string;
+    used: string;
+  };
+  systemCpu: {
+    averageUsage: string;
+  };
+  appMemory: {
+    rss: string;
+    heapTotal: string;
+    heapUsed: string;
+    external: string;
+  };
+  appCpu: {
+    user: string;
+    system: string;
+  };
+};
+
+export type SystemAlertData = {
+  type: string;
+  message: string;
+};
+
+export type OnPerformanceData = (
+  callback: (data: PerformanceData) => void
+) => void;
+
+export type OnPerformanceAlert = (
+  callback: (data: SystemAlertData) => void
+) => void;

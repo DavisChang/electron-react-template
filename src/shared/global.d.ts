@@ -11,6 +11,8 @@ import {
   SubscribeSomeData,
   OpenSecondaryWindow,
   OpenDevTool,
+  OnPerformanceData,
+  OnPerformanceAlert,
 } from "./types";
 
 declare global {
@@ -31,6 +33,8 @@ declare global {
       writeNote: WriteNote;
       createNote: CreateNote;
       deleteNote: DeleteNote;
+      onPerformanceData: OnPerformanceData;
+      onPerformanceAlert: OnPerformanceAlert;
     };
   }
 }

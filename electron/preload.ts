@@ -5,8 +5,10 @@ import {
   GetDeviceInfo,
   GetNotes,
   Note,
+  PerformanceData,
   ReadNote,
   SubscribeSomeData,
+  SystemAlertData,
   WriteNote,
 } from "@/shared/types";
 
@@ -78,6 +80,13 @@ try {
       ipcRenderer.invoke("createNote", ...args),
     deleteNote: (...args: Parameters<DeleteNote>) =>
       ipcRenderer.invoke("deleteNote", ...args),
+
+    onPerformanceData: (callback: (data: PerformanceData) => void) => {
+      ipcRenderer.on("performance-data", (_, data) => callback(data));
+    },
+    onPerformanceAlert: (callback: (alert: SystemAlertData) => void) => {
+      ipcRenderer.on("performance-alert", (_, alert) => callback(alert));
+    },
   });
 } catch (error) {
   console.error("ContextBridge, context");

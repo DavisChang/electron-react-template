@@ -12,6 +12,7 @@ import { autoUpdater } from "electron-updater";
 import { checkInternetConnection } from "./lib/internet";
 import { createSecondaryWindow } from "./windows/secondaryWindow";
 import { Note } from "@/shared/types";
+import getSystemPerformance from "./lib/deviceSystemUsage";
 
 // basic flags
 autoUpdater.autoDownload = false;
@@ -86,6 +87,9 @@ function createWindow() {
 
   // Set up auto-update events
   setupAutoUpdater();
+
+  // Send system performance data every 5 seconds
+  monitorSystemPerformance(5000);
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -212,4 +216,22 @@ function setupAutoUpdater() {
   autoUpdater.on("error", (error) => {
     mainWindow?.webContents.send("onUpdateMessage", `Error: ${error}`);
   });
+}
+
+function monitorSystemPerformance(time: number) {
+  setInterval(() => {
+    if (mainWindow) {
+      const performanceData = getSystemPerformance();
+      mainWindow.webContents.send("performance-data", performanceData);
+
+      // Example: Sending an alert if system CPU usage exceeds 80%
+      const cpuUsage = parseFloat(performanceData.systemCpu.averageUsage);
+      if (cpuUsage > 80) {
+        mainWindow.webContents.send("performance-alert", {
+          type: "CPU",
+          message: `High CPU Usage: ${performanceData.systemCpu.averageUsage}`,
+        });
+      }
+    }
+  }, time);
 }
