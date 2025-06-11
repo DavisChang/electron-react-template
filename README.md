@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+# Electron + React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -33,3 +33,6 @@ export default {
 ## How Electron IPC Works
 
 ![Overview of IPC](./images/electron-ipc.png)
+
+## How to Distribute Your macOS App: Code Signing, Notarization, and Stapling
+[MacOS App Distribution: Code Signing, Notarization, Stapling](./AppDistribution.md)

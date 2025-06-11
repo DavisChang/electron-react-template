@@ -1,0 +1,1 @@
+# 📦 Electron Builder - macOS Code Signing & Notarization Guide
