@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/DavisChang/electron-react-template/branch/main/graph/badge.svg)](https://app.codecov.io/gh/DavisChang/electron-react-template)
+
 # Electron + React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
@@ -43,5 +45,3 @@ This project uses [Codecov](https://about.codecov.io/) for code coverage reporti
 
 - **Unit tests** are run automatically on every push to the `main` branch using [GitHub Actions](.github/workflows/unit-test.yml).
 - Code coverage reports are uploaded to Codecov after each successful unit test run.
-
-[![codecov](https://codecov.io/gh/DavisChang/electron-react-template-autoupdater/branch/main/graph/badge.svg)](https://codecov.io/gh/DavisChang/electron-react-template-autoupdater)
