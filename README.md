@@ -36,3 +36,12 @@ export default {
 
 ## How to Distribute Your macOS App: Code Signing, Notarization, and Stapling
 [MacOS App Distribution: Code Signing, Notarization, Stapling](./AppDistribution.md)
+
+## Test Coverage and CI
+
+This project uses [Codecov](https://about.codecov.io/) for code coverage reporting and GitHub Actions for continuous integration.
+
+- **Unit tests** are run automatically on every push to the `main` branch using [GitHub Actions](.github/workflows/unit-test.yml).
+- Code coverage reports are uploaded to Codecov after each successful unit test run.
+
+[![codecov](https://codecov.io/gh/DavisChang/electron-react-template-autoupdater/branch/main/graph/badge.svg)](https://codecov.io/gh/DavisChang/electron-react-template-autoupdater)

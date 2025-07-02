@@ -21,7 +21,7 @@
     "test": "npm run lint && npm run typecheck:web && npm run typecheck:node",
     "test:e2e": "playwright test",
     "test:unit": "vitest",
-    "test:unit:coverage": "vitest run --coverage",
+    "test:unit:coverage": "vitest run --coverage --coverage.reporter=lcov",
     "test:build": "npm run lint && npm run typecheck:web && npm run typecheck:node && npm run build",
     "typecheck:web": "tsc --noEmit -p tsconfig.json --composite false",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false"
