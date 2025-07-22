@@ -28,6 +28,8 @@
     "quality:check": "./scripts/quality-check.sh",
     "quality:full": "npm run quality:check && npm run test:e2e",
     "pre-commit": "npm run quality:check",
+    "setup:hooks": "./scripts/setup-hooks.sh",
+    "setup:dev": "npm install && ./scripts/setup-hooks.sh && npm run quality:check",
     "test:build": "npm run lint && npm run typecheck:web && npm run typecheck:node && npm run build",
     "typecheck:web": "tsc --noEmit -p tsconfig.json --composite false",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false"
@@ -69,6 +71,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "husky": "^9.1.6",
+    "jsdom": "^26.1.0",
     "postcss": "^8.4.47",
     "tailwind-merge": "^2.5.4",
     "tailwindcss": "^3.4.14",

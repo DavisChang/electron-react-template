@@ -1,0 +1,20 @@
+#!/bin/bash
+
+echo "🔍 Running pre-commit quality checks..."
+
+# Run quality check script
+if [[ -f "scripts/quality-check.sh" ]]; then
+    ./scripts/quality-check.sh
+    
+    if [[ $? -eq 0 ]]; then
+        echo "✅ All quality checks passed. Proceeding with commit."
+    else
+        echo "❌ Quality checks failed. Commit aborted."
+        echo ""
+        echo "💡 Fix the issues above and try again."
+        echo "   Or run 'git commit --no-verify' to bypass checks (not recommended)."
+        exit 1
+    fi
+else
+    echo "⚠️ Quality check script not found. Skipping pre-commit checks."
+fi

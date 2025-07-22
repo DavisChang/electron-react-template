@@ -1,0 +1,30 @@
+#!/bin/bash
+
+echo "🚀 Running pre-push checks..."
+
+# Get the remote and URL
+remote="$1"
+url="$2"
+
+# Check if we're pushing to main branch
+protected_branch='main'
+current_branch=$(git symbolic-ref HEAD | sed 's/refs\/heads\///')
+
+if [[ "$current_branch" == "$protected_branch" ]]; then
+    echo "⚠️ Pushing to protected branch '$protected_branch'."
+    echo "🔍 Running comprehensive quality checks..."
+    
+    # Run full quality check including E2E tests
+    if command -v npm &> /dev/null; then
+        if npm run quality:full; then
+            echo "✅ All comprehensive checks passed."
+        else
+            echo "❌ Comprehensive checks failed."
+            echo "💡 Please fix all issues before pushing to $protected_branch"
+            echo "   Or use 'git push --no-verify' to bypass (not recommended for main branch)."
+            exit 1
+        fi
+    fi
+fi
+
+echo "✅ Pre-push checks completed successfully."
