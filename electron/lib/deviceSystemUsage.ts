@@ -1,5 +1,5 @@
-import os from "os";
-import process from "process";
+import os from 'os';
+import process from 'process';
 
 function getSystemPerformance() {
   const totalMemory = os.totalmem();
@@ -8,7 +8,7 @@ function getSystemPerformance() {
 
   // CPU Usage
   const cpus = os.cpus();
-  const cpuUsage = cpus.map((cpu) => {
+  const cpuUsage = cpus.map(cpu => {
     const total = Object.values(cpu.times).reduce((acc, time) => acc + time, 0);
     const idle = cpu.times.idle;
     return 1 - idle / total;

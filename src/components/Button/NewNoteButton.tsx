@@ -1,11 +1,11 @@
 import {
   ActionButton,
   ActionButtonProps,
-} from "@/components/Button/ActionButton";
-import { createEmptyNoteAtom } from "@/store";
+} from '@/components/Button/ActionButton';
+import { createEmptyNoteAtom } from '@/store';
 
-import { useSetAtom } from "jotai";
-import { LuFileSignature } from "react-icons/lu";
+import { useSetAtom } from 'jotai';
+import { LuFileSignature } from 'react-icons/lu';
 
 export const NewNoteButton = ({ ...props }: ActionButtonProps) => {
   const createEmptyNote = useSetAtom(createEmptyNoteAtom);

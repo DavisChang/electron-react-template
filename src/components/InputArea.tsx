@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 function InputArea() {
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>('');
   const onClickHandler = () => {
-    if (input.trim() !== "") {
+    if (input.trim() !== '') {
       window.context.openUrl(input);
     }
   };
   const onClickOpenBrowserUrl = () => {
-    if (input.trim() !== "") {
+    if (input.trim() !== '') {
       window.context.openExternalUrl(input);
     }
   };

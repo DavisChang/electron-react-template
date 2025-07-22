@@ -1,6 +1,7 @@
 # SonarQube Coverage Setup
 
-This project is configured to use SonarQube Cloud for code quality analysis and test coverage reporting.
+This project is configured to use SonarQube Cloud for code quality analysis and test coverage
+reporting.
 
 ## Configuration Files
 
@@ -30,6 +31,7 @@ SONAR_HOST_URL=https://sonarcloud.io
 ```
 
 To get your SonarCloud token:
+
 1. Go to SonarCloud → My Account → Security
 2. Generate a new token
 3. Copy the token value
@@ -58,12 +60,14 @@ open coverage/lcov-report/index.html
 ### GitHub Actions
 
 The workflows will automatically run on:
+
 - Push to `main` or `develop` branches
 - Pull requests
 
 ### SonarQube Reports
 
 After successful analysis, you can view reports at:
+
 - SonarCloud dashboard: https://sonarcloud.io/projects
 - Coverage metrics, code smells, bugs, and security issues
 
@@ -94,8 +98,8 @@ The project uses Vitest for testing with LCOV coverage reports:
 
 ## Scripts Available
 
-| Script | Description |
-|--------|-------------|
-| `npm run test:coverage` | Run tests with coverage |
-| `npm run sonar:scan` | Run SonarQube analysis locally |
-| `npm run test:sonar` | Run tests + SonarQube analysis | 
+| Script                  | Description                    |
+| ----------------------- | ------------------------------ |
+| `npm run test:coverage` | Run tests with coverage        |
+| `npm run sonar:scan`    | Run SonarQube analysis locally |
+| `npm run test:sonar`    | Run tests + SonarQube analysis |

@@ -1,4 +1,4 @@
-import { ipcRenderer, contextBridge } from "electron";
+import { ipcRenderer, contextBridge } from 'electron';
 import {
   CreateNote,
   DeleteNote,
@@ -10,16 +10,16 @@ import {
   SubscribeSomeData,
   SystemAlertData,
   WriteNote,
-} from "@/shared/types";
+} from '@/shared/types';
 
 // --------- Expose some API to the Renderer process ---------
 const allowedChannels = [
-  "onUpdateMessage",
-  "main-process-message",
-  "secondary-process-message",
+  'onUpdateMessage',
+  'main-process-message',
+  'secondary-process-message',
 ];
 
-contextBridge.exposeInMainWorld("ipcRenderer", {
+contextBridge.exposeInMainWorld('ipcRenderer', {
   on(...args: Parameters<typeof ipcRenderer.on>) {
     const [channel, listener] = args;
     if (!allowedChannels.includes(channel)) {
@@ -53,41 +53,41 @@ contextBridge.exposeInMainWorld("ipcRenderer", {
 });
 
 try {
-  contextBridge.exposeInMainWorld("context", {
+  contextBridge.exposeInMainWorld('context', {
     locate: navigator.language,
     electron: () => process.versions.electron,
     chrome: () => process.versions.chrome,
 
     // example ipcRenderer.on
     subscribeSomeData: (callback: SubscribeSomeData) =>
-      ipcRenderer.on("some-data", (_, data) => {
+      ipcRenderer.on('some-data', (_, data) => {
         callback(data);
       }),
-    openUrl: (url: string) => ipcRenderer.send("openUrl", url),
-    openExternalUrl: (url: string) => ipcRenderer.send("openExternalUrl", url),
-    openDevTool: () => ipcRenderer.invoke("openDevTool"),
+    openUrl: (url: string) => ipcRenderer.send('openUrl', url),
+    openExternalUrl: (url: string) => ipcRenderer.send('openExternalUrl', url),
+    openDevTool: () => ipcRenderer.invoke('openDevTool'),
     openSecondaryWindow: (note: Note) =>
-      ipcRenderer.send("openSecondaryWindow", note),
+      ipcRenderer.send('openSecondaryWindow', note),
     getDeviceInfo: (...args: Parameters<GetDeviceInfo>) =>
-      ipcRenderer.invoke("getDeviceInfo", ...args),
+      ipcRenderer.invoke('getDeviceInfo', ...args),
     getNotes: (...args: Parameters<GetNotes>) =>
-      ipcRenderer.invoke("getNotes", ...args),
+      ipcRenderer.invoke('getNotes', ...args),
     readNote: (...args: Parameters<ReadNote>) =>
-      ipcRenderer.invoke("readNote", ...args),
+      ipcRenderer.invoke('readNote', ...args),
     writeNote: (...args: Parameters<WriteNote>) =>
-      ipcRenderer.invoke("writeNote", ...args),
+      ipcRenderer.invoke('writeNote', ...args),
     createNote: (...args: Parameters<CreateNote>) =>
-      ipcRenderer.invoke("createNote", ...args),
+      ipcRenderer.invoke('createNote', ...args),
     deleteNote: (...args: Parameters<DeleteNote>) =>
-      ipcRenderer.invoke("deleteNote", ...args),
+      ipcRenderer.invoke('deleteNote', ...args),
 
     onPerformanceData: (callback: (data: PerformanceData) => void) => {
-      ipcRenderer.on("performance-data", (_, data) => callback(data));
+      ipcRenderer.on('performance-data', (_, data) => callback(data));
     },
     onPerformanceAlert: (callback: (alert: SystemAlertData) => void) => {
-      ipcRenderer.on("performance-alert", (_, alert) => callback(alert));
+      ipcRenderer.on('performance-alert', (_, alert) => callback(alert));
     },
   });
 } catch (error) {
-  console.error("ContextBridge, context");
+  console.error('ContextBridge, context');
 }

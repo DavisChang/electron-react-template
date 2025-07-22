@@ -5,6 +5,7 @@
 ## 🚀 快速開始
 
 ### 初始設定
+
 ```bash
 # 1. 安裝依賴
 npm install
@@ -20,6 +21,7 @@ npm run quality:check
 ## 📋 開發工作流程
 
 ### 1. 功能開發流程
+
 ```bash
 # 1. 建立功能分支
 git checkout -b feature/your-feature-name
@@ -42,6 +44,7 @@ git push origin feature/your-feature-name
 ```
 
 ### 2. Commit 訊息規範
+
 使用 [Conventional Commits](https://conventionalcommits.org/) 格式：
 
 ```
@@ -53,6 +56,7 @@ git push origin feature/your-feature-name
 ```
 
 #### 類型 (type)
+
 - `feat`: 新功能
 - `fix`: 錯誤修復
 - `docs`: 文檔更新
@@ -63,6 +67,7 @@ git push origin feature/your-feature-name
 - `chore`: 建構過程或輔助工具的變動
 
 #### 範例
+
 ```bash
 feat(auth): add user login functionality
 fix(ui): resolve button alignment issue
@@ -73,16 +78,19 @@ refactor: extract common utility functions
 ## 🧪 測試策略
 
 ### 1. 測試層級
+
 - **單元測試**: 函數、組件邏輯
 - **整合測試**: 組件間互動
 - **E2E 測試**: 完整用戶流程
 
 ### 2. 測試覆蓋率要求
+
 - **最低要求**: 80%
 - **新代碼要求**: 85%
 - **關鍵功能**: 95%
 
 ### 3. 測試最佳實踐
+
 ```typescript
 // ✅ 良好的測試
 describe('UserService', () => {
@@ -107,6 +115,7 @@ describe('UserService', () => {
 ## 🎨 程式碼品質標準
 
 ### 1. TypeScript 規範
+
 ```typescript
 // ✅ 良好的 TypeScript 代碼
 interface User {
@@ -132,6 +141,7 @@ function processUserData(data: UserData): ProcessedUserData {
 ```
 
 ### 2. React 組件規範
+
 ```tsx
 // ✅ 良好的 React 組件
 interface ButtonProps {
@@ -165,6 +175,7 @@ export const Button: React.FC<ButtonProps> = ({
 ```
 
 ### 3. 檔案結構規範
+
 ```
 src/
 ├── components/           # 可重用組件
@@ -184,27 +195,33 @@ src/
 ## 🔍 程式碼審查準則
 
 ### 1. 審查檢查清單
+
 #### 功能性
+
 - [ ] 代碼是否符合需求？
 - [ ] 邊界情況是否處理？
 - [ ] 錯誤處理是否適當？
 
 #### 可讀性
+
 - [ ] 代碼是否易於理解？
 - [ ] 變數和函數命名是否清晰？
 - [ ] 註釋是否有助於理解？
 
 #### 可維護性
+
 - [ ] 代碼是否遵循 DRY 原則？
 - [ ] 是否有適當的抽象？
 - [ ] 依賴關係是否清晰？
 
 #### 性能
+
 - [ ] 是否有不必要的計算？
 - [ ] 記憶體使用是否合理？
 - [ ] 是否有潛在的性能瓶頸？
 
 ### 2. 審查流程
+
 1. **自我審查**: 提交 PR 前先自己檢查
 2. **自動檢查**: SonarQube 自動分析
 3. **同儕審查**: 至少一位團隊成員審查
@@ -213,6 +230,7 @@ src/
 ## 🛠️ 開發工具配置
 
 ### 1. VS Code 推薦擴充功能
+
 ```json
 {
   "recommendations": [
@@ -227,6 +245,7 @@ src/
 ```
 
 ### 2. VS Code 設定
+
 ```json
 {
   "editor.formatOnSave": true,
@@ -242,12 +261,14 @@ src/
 ## 📊 品質指標監控
 
 ### 1. 關鍵指標
+
 - **代碼覆蓋率**: 目標 ≥ 80%
 - **重複代碼**: 目標 ≤ 3%
 - **圈複雜度**: 每個函數 ≤ 10
 - **技術債務比率**: ≤ 5%
 
 ### 2. 監控工具
+
 - **SonarCloud**: 代碼品質分析
 - **GitHub Actions**: CI/CD 流程
 - **Vitest**: 測試覆蓋率
@@ -256,6 +277,7 @@ src/
 ## 🔒 安全最佳實踐
 
 ### 1. 敏感資料處理
+
 ```typescript
 // ❌ 不要硬編碼敏感資料
 const API_KEY = 'sk-1234567890abcdef';
@@ -270,6 +292,7 @@ if (!API_KEY) {
 ```
 
 ### 2. 輸入驗證
+
 ```typescript
 // ✅ 使用 schema 驗證
 import { z } from 'zod';
@@ -288,7 +311,8 @@ function createUser(input: unknown) {
 ## 📝 文檔撰寫規範
 
 ### 1. JSDoc 註釋
-```typescript
+
+````typescript
 /**
  * 計算兩個數字的和
  * @param a - 第一個數字
@@ -302,9 +326,10 @@ function createUser(input: unknown) {
 function add(a: number, b: number): number {
   return a + b;
 }
-```
+````
 
 ### 2. README 結構
+
 - 專案簡介
 - 安裝指引
 - 使用方法
@@ -317,6 +342,7 @@ function add(a: number, b: number): number {
 ### 常見問題與解決方案
 
 #### SonarQube 分析失敗
+
 ```bash
 # 檢查 token 是否正確設定
 echo $SONAR_TOKEN
@@ -329,6 +355,7 @@ npm run sonar:scan
 ```
 
 #### 測試覆蓋率不足
+
 ```bash
 # 查看詳細覆蓋率報告
 npm run test:coverage
@@ -341,12 +368,14 @@ npm run test:coverage -- --reporter=verbose
 ## 📞 支援與資源
 
 ### 內部資源
+
 - 專案 Wiki: [連結]
 - 技術討論: [Slack/Teams 頻道]
 - Code Review 指南: `docs/CODE_REVIEW_GUIDE.md`
 
 ### 外部資源
+
 - [SonarQube 文檔](https://docs.sonarcloud.io/)
 - [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
 - [TypeScript 手冊](https://www.typescriptlang.org/docs/)
-- [Vitest 文檔](https://vitest.dev/) 
+- [Vitest 文檔](https://vitest.dev/)

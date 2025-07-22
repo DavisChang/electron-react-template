@@ -1,5 +1,5 @@
-import { notesAtom, selectedNoteIndexAtom } from "@/store";
-import { useAtom, useAtomValue } from "jotai";
+import { notesAtom, selectedNoteIndexAtom } from '@/store';
+import { useAtom, useAtomValue } from 'jotai';
 
 export const useNotesList = ({ onSelect }: { onSelect?: () => void }) => {
   const notes = useAtomValue(notesAtom);
@@ -9,7 +9,7 @@ export const useNotesList = ({ onSelect }: { onSelect?: () => void }) => {
   );
 
   const handleNoteSelect = (index: number) => async () => {
-    console.log("handleNoteSelect:", index);
+    console.log('handleNoteSelect:', index);
     setSelectedNoteIndex(index);
 
     if (onSelect) {

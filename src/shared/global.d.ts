@@ -13,11 +13,11 @@ import {
   OpenDevTool,
   OnPerformanceData,
   OnPerformanceAlert,
-} from "./types";
+} from './types';
 
 declare global {
   interface Window {
-    ipcRenderer: import("electron").IpcRenderer;
+    ipcRenderer: import('electron').IpcRenderer;
     context: {
       locate?: string;
       electron: ElectronVersion;

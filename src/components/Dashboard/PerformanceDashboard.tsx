@@ -1,5 +1,5 @@
-import { PerformanceData } from "@/shared/types";
-import React, { useEffect, useState } from "react";
+import { PerformanceData } from '@/shared/types';
+import React, { useEffect, useState } from 'react';
 
 const PerformanceDashboard: React.FC = () => {
   const [performanceData, setPerformanceData] =
@@ -8,18 +8,18 @@ const PerformanceDashboard: React.FC = () => {
 
   useEffect(() => {
     // Listen for performance data
-    window.context.onPerformanceData((data) => {
+    window.context.onPerformanceData(data => {
       setPerformanceData(data);
     });
 
     // Listen for performance alerts
-    window.context.onPerformanceAlert((alert) => {
-      setAlerts((prevAlerts) => [...prevAlerts, alert.message]);
+    window.context.onPerformanceAlert(alert => {
+      setAlerts(prevAlerts => [...prevAlerts, alert.message]);
     });
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: '20px' }}>
       <h1>Performance Dashboard</h1>
 
       {performanceData && (
@@ -41,11 +41,11 @@ const PerformanceDashboard: React.FC = () => {
       )}
 
       {alerts.length > 0 && (
-        <div style={{ marginTop: "20px" }}>
+        <div style={{ marginTop: '20px' }}>
           <h2>Alerts</h2>
           <ul>
             {alerts.map((alert, index) => (
-              <li key={index} style={{ color: "red" }}>
+              <li key={index} style={{ color: 'red' }}>
                 {alert}
               </li>
             ))}

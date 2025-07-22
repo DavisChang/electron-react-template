@@ -1,0 +1,40 @@
+# Build outputs
+dist/
+dist-electron/
+build/
+coverage/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.generated.*
+*.bundle.js
+
+# Test results
+test-results/
+playwright-report/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/settings.json
+.idea/
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Log files
+*.log
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Git hooks
+.githooks/ 

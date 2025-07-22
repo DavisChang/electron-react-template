@@ -1,14 +1,14 @@
-import { useEffect, useState, useRef } from "react";
-import { Note } from "./shared/types";
-import { formatDateFromMs } from "./utils/formatDate";
+import { useEffect, useState, useRef } from 'react';
+import { Note } from './shared/types';
+import { formatDateFromMs } from './utils/formatDate';
 import {
   MDXEditor,
   headingsPlugin,
   listsPlugin,
   markdownShortcutPlugin,
   quotePlugin,
-} from "@mdxeditor/editor";
-import html2pdf from "html2pdf.js";
+} from '@mdxeditor/editor';
+import html2pdf from 'html2pdf.js';
 
 const SecondaryApp = () => {
   const [data, setData] = useState<Note | null>(null);
@@ -26,12 +26,12 @@ const SecondaryApp = () => {
     };
 
     // Add the listener
-    window.ipcRenderer.on("secondary-process-message", handleSecondaryMessage);
+    window.ipcRenderer.on('secondary-process-message', handleSecondaryMessage);
 
     // Cleanup the listener when the component unmounts
     return () => {
       window.ipcRenderer.off(
-        "secondary-process-message",
+        'secondary-process-message',
         handleSecondaryMessage
       );
     };
@@ -39,22 +39,22 @@ const SecondaryApp = () => {
 
   const onClickDownloadPDF = () => {
     if (!contentRef.current) {
-      console.error("Content ref is null");
+      console.error('Content ref is null');
       return;
     }
 
     // Configure html2pdf options
     const options = {
       margin: 10,
-      filename: `${data?.title || "document"}.pdf`,
+      filename: `${data?.title || 'document'}.pdf`,
       html2canvas: {
         scale: 2, // Higher scale for better resolution
       },
-      image: { type: "jpeg", quality: 0.98 },
+      image: { type: 'jpeg', quality: 0.98 },
       jsPDF: {
-        unit: "mm",
-        format: "a4",
-        orientation: "portrait",
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait',
       },
     };
 

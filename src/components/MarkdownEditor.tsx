@@ -1,11 +1,11 @@
-import { useMarkdownEditor } from "@/hooks/useMarkdownEditor";
+import { useMarkdownEditor } from '@/hooks/useMarkdownEditor';
 import {
   MDXEditor,
   headingsPlugin,
   listsPlugin,
   markdownShortcutPlugin,
   quotePlugin,
-} from "@mdxeditor/editor";
+} from '@mdxeditor/editor';
 
 const MarkdownEditor = () => {
   const { editorRef, handleAutoSaving, selectedNote, handleBlur } =

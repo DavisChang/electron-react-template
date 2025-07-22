@@ -4,29 +4,29 @@ import React, {
   useEffect,
   useRef,
   useState,
-} from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/electron-vite.animate.svg";
-import InputArea from "components/InputArea.tsx";
-import { RootLayout, Sidebar, Content } from "@/components/AppLayout";
-import { formatDateFromMs } from "@/utils/formatDate";
+} from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/electron-vite.animate.svg';
+import InputArea from 'components/InputArea.tsx';
+import { RootLayout, Sidebar, Content } from '@/components/AppLayout';
+import { formatDateFromMs } from '@/utils/formatDate';
 
-import { FloatingNoteTitle } from "./components/FloatingNoteTitle";
-import { PreviewList } from "./components/SideBar/PreviewList";
-import { ActionButtonsRow } from "./components/SideBar/ActionButtonsRow";
-import { DeviceInfo, Statistics } from "./shared/types";
-import { useMarkdownEditor } from "./hooks/useMarkdownEditor";
-import MarkdownWithMath from "./components/MarkdownMathJax/MarkdownWithMath";
-import IframeComponent from "./components/Webview/IframeWebview";
-import PerformanceDashboard from "./components/Dashboard/PerformanceDashboard";
+import { FloatingNoteTitle } from './components/FloatingNoteTitle';
+import { PreviewList } from './components/SideBar/PreviewList';
+import { ActionButtonsRow } from './components/SideBar/ActionButtonsRow';
+import { DeviceInfo, Statistics } from './shared/types';
+import { useMarkdownEditor } from './hooks/useMarkdownEditor';
+import MarkdownWithMath from './components/MarkdownMathJax/MarkdownWithMath';
+import IframeComponent from './components/Webview/IframeWebview';
+import PerformanceDashboard from './components/Dashboard/PerformanceDashboard';
 
-const MarkdownEditor = React.lazy(() => import("./components/MarkdownEditor"));
+const MarkdownEditor = React.lazy(() => import('./components/MarkdownEditor'));
 
 function App() {
   const contentContainerRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>();
-  const [updateMessage, setUpdateMessage] = useState("");
+  const [updateMessage, setUpdateMessage] = useState('');
 
   const { selectedNote } = useMarkdownEditor();
 
@@ -35,7 +35,7 @@ function App() {
   };
 
   useEffect(() => {
-    window.ipcRenderer.on("onUpdateMessage", (_event, message) => {
+    window.ipcRenderer.on('onUpdateMessage', (_event, message) => {
       setUpdateMessage(message);
     });
 
@@ -92,7 +92,7 @@ function App() {
             <button
               data-testid="count"
               className="mx-4 my-4 bg-transparent dark:bg-white/5"
-              onClick={() => setCount((count) => count + 1)}
+              onClick={() => setCount(count => count + 1)}
             >
               count is {count}
             </button>

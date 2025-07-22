@@ -1,10 +1,10 @@
-import { NoteContent } from "@/shared/types";
-import { saveNoteAtom, selectedNoteAtom } from "@/store";
-import { MDXEditorMethods } from "@mdxeditor/editor";
-import { useAtomValue, useSetAtom } from "jotai";
-import { useRef } from "react";
-import { throttle } from "lodash-es";
-import { autoSavingTime } from "@/shared/constants";
+import { NoteContent } from '@/shared/types';
+import { saveNoteAtom, selectedNoteAtom } from '@/store';
+import { MDXEditorMethods } from '@mdxeditor/editor';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useRef } from 'react';
+import { throttle } from 'lodash-es';
+import { autoSavingTime } from '@/shared/constants';
 
 export const useMarkdownEditor = () => {
   const selectedNote = useAtomValue(selectedNoteAtom);
@@ -15,7 +15,7 @@ export const useMarkdownEditor = () => {
     async (content: NoteContent) => {
       if (!selectedNote) return;
 
-      console.info("Auto saving:", selectedNote.title);
+      console.info('Auto saving:', selectedNote.title);
       await saveNote(content);
     },
     autoSavingTime,
