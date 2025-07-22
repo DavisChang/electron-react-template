@@ -22,6 +22,9 @@
     "test:e2e": "playwright test",
     "test:unit": "vitest",
     "test:unit:coverage": "vitest run --coverage --coverage.reporter=lcov",
+    "test:coverage": "npm run test:unit:coverage",
+    "sonar:scan": "sonar-scanner",
+    "test:sonar": "npm run test:coverage && npm run sonar:scan",
     "test:build": "npm run lint && npm run typecheck:web && npm run typecheck:node && npm run build",
     "typecheck:web": "tsc --noEmit -p tsconfig.json --composite false",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false"

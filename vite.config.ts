@@ -18,6 +18,23 @@ export default defineConfig({
   },
   test: {
     exclude: ["**/node_modules/**", "**/e2e/**"],
+    coverage: {
+      reporter: ["text", "lcov", "html"],
+      reportsDirectory: "./coverage",
+      exclude: [
+        "node_modules/",
+        "dist/",
+        "dist-electron/",
+        "e2e/",
+        "**/*.d.ts",
+        "**/*.config.*",
+        "**/coverage/**",
+        "playwright-report/",
+        "test-results/",
+        "resources/",
+        "public/",
+      ],
+    },
   },
   plugins: [
     react(),
