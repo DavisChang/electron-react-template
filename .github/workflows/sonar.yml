@@ -12,6 +12,9 @@ jobs:
   sonarqube:
     name: SonarQube Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -56,3 +59,42 @@ jobs:
 
       - name: "Quality Gate Status"
         run: echo "The Quality Gate status is ${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}"
+
+      # Fail the workflow if Quality Gate fails
+      - name: Fail if Quality Gate failed
+        if: steps.sonarqube-quality-gate-check.outputs.quality-gate-status == 'FAILED'
+        run: |
+          echo "Quality Gate failed. Please fix the issues before merging."
+          exit 1
+
+      # Optional: Add PR comment with SonarQube results
+      - name: Add PR Comment with SonarQube Results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const qualityGateStatus = '${{ steps.sonarqube-quality-gate-check.outputs.quality-gate-status }}';
+            const projectKey = 'DavisChang_electron-react-template';
+            const sonarCloudUrl = `https://sonarcloud.io/project/overview?id=${projectKey}&pullRequest=${{ github.event.number }}`;
+
+            const statusEmoji = qualityGateStatus === 'PASSED' ? '✅' : '❌';
+            const statusText = qualityGateStatus === 'PASSED' ? 'PASSED' : 'FAILED';
+
+            const comment = `## ${statusEmoji} SonarQube Analysis Results
+
+            **Quality Gate Status:** ${statusText}
+
+            📊 [View detailed analysis on SonarCloud](${sonarCloudUrl})
+
+            ${qualityGateStatus === 'FAILED' ? 
+              '⚠️ **This PR cannot be merged until all quality issues are resolved.**' : 
+              '🎉 **Great work! Your code meets all quality standards.**'
+            }
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

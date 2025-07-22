@@ -19,8 +19,19 @@ export default defineConfig({
   test: {
     exclude: ["**/node_modules/**", "**/e2e/**"],
     coverage: {
-      reporter: ["text", "lcov", "html"],
+      provider: "v8",
+      reporter: ["text", "text-summary", "lcov", "html", "json"],
       reportsDirectory: "./coverage",
+      // Strict coverage thresholds
+      thresholds: {
+        lines: 80,
+        functions: 80,
+        branches: 75,
+        statements: 80,
+      },
+      // Include source files for coverage even if not tested
+      all: true,
+      include: ["src/**/*.{ts,tsx}", "electron/**/*.{ts,tsx}"],
       exclude: [
         "node_modules/",
         "dist/",
@@ -33,7 +44,26 @@ export default defineConfig({
         "test-results/",
         "resources/",
         "public/",
+        "**/*.stories.*",
+        "**/index.html",
+        "**/secondary.html",
+        "src/main.tsx", // Entry point, usually minimal
+        "src/Secondary.tsx", // Secondary entry
+        "electron/main.ts", // Electron main process
+        "electron/preload.ts", // Preload script
+        "**/mocks/**",
+        "**/__mocks__/**",
       ],
+    },
+    // Test environment configuration
+    environment: "jsdom",
+    globals: true,
+    setupFiles: [], // Add setup files if needed
+    // Reporter configuration
+    reporters: ["verbose", "json", "html"],
+    outputFile: {
+      json: "./test-results/test-results.json",
+      html: "./test-results/test-results.html",
     },
   },
   plugins: [
