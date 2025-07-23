@@ -123,8 +123,29 @@ jobs:
       - name: 🎭 Install Playwright dependencies
         run: npx playwright install --with-deps
 
-      - name: 🧪 Run E2E tests
-        run: npm run test:e2e:safe
+      - name: 🖥️ Setup virtual display for headless testing
+        run: |
+          # Install Xvfb for virtual display
+          sudo apt-get update
+          sudo apt-get install -y xvfb x11-utils
+
+          # Start virtual display
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1280x720x24 > /dev/null 2>&1 &
+
+          # Wait for display to be ready
+          sleep 3
+
+          # Verify display is working
+          xdpyinfo -display :99 >/dev/null 2>&1 && echo "✅ Virtual display ready" || echo "❌ Virtual display failed"
+
+      - name: 🧪 Run E2E tests (headless)
+        env:
+          DISPLAY: :99
+          CI: true
+          ELECTRON_DISABLE_SANDBOX: true
+          ELECTRON_ENABLE_LOGGING: true
+        run: npm run test:e2e:headless
 
       - name: 📊 Upload Playwright Report
         uses: actions/upload-artifact@v4

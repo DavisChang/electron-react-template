@@ -66,15 +66,38 @@ test.beforeEach(async () => {
     // Wait a bit before launching new instance
     await new Promise(resolve => setTimeout(resolve, 500));
 
+    // Configure Electron for headless CI environment
+    const isCI = !!process.env.CI;
+    const launchArgs = ['.'];
+
+    // Add headless flags for CI environment
+    if (isCI) {
+      launchArgs.push(
+        '--headless',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
+        '--disable-software-rasterizer',
+        '--no-sandbox',
+        '--disable-extensions',
+        '--disable-web-security'
+      );
+    }
+
     electronApp = await _electron.launch({
-      args: ['.'],
+      args: launchArgs,
       env: {
         NODE_ENV: 'development',
         // Add unique identifier to prevent singleton conflicts
         ELECTRON_ENABLE_SECURITY_WARNINGS: 'false',
         ELECTRON_DISABLE_SANDBOX: 'true',
+        // Additional CI environment variables
+        ...(isCI && {
+          DISPLAY: process.env.DISPLAY || ':99',
+          ELECTRON_IS_DEV: '0',
+          CI: '1',
+        }),
       },
-      timeout: 15000, // 15 second timeout for launch
+      timeout: isCI ? 30000 : 15000, // Longer timeout in CI
     });
 
     if (!electronApp) {

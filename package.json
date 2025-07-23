@@ -23,6 +23,8 @@
     "test": "npm run lint && npm run typecheck:web && npm run typecheck:node",
     "test:e2e": "playwright test",
     "test:e2e:safe": "npm run fix:e2e && playwright test",
+    "test:e2e:ci": "CI=true npm run test:e2e:safe",
+    "test:e2e:headless": "CI=true DISPLAY=:99 npm run test:e2e:safe",
     "test:unit": "vitest",
     "test:unit:coverage": "vitest run --coverage --coverage.reporter=lcov",
     "test:coverage": "npm run test:unit:coverage",
