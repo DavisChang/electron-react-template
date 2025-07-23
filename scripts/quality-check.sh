@@ -127,10 +127,12 @@ if [[ -z "$CI" ]]; then
     fi
 fi
 
-# Clean up build artifacts after all tests complete
-print_step "Cleaning up build artifacts..."
-rm -rf dist dist-electron
-print_success "Build artifacts cleaned up"
+# Clean up build artifacts after all tests complete (unless --no-cleanup flag is used)
+if [[ "$1" != "--no-cleanup" ]]; then
+    print_step "Cleaning up build artifacts..."
+    rm -rf dist dist-electron
+    print_success "Build artifacts cleaned up"
+fi
 
 # 6. SonarQube local analysis (if sonar-scanner is available)
 if command -v sonar-scanner &> /dev/null; then
