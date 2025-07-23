@@ -68,6 +68,7 @@ npm run lint:fix         # Fix ESLint issues automatically
 npm run test:unit        # Run unit tests
 npm run test:coverage    # Run tests with coverage
 npm run test:e2e         # Run end-to-end tests
+npm run test:e2e:safe    # Safe E2E tests (auto-build check)
 
 # Utilities
 npm run badges           # Generate quality badges
@@ -134,6 +135,7 @@ This template includes a comprehensive quality control system:
 - 📋 [Quality Control System Overview](docs/QUALITY_CONTROL_SYSTEM_OVERVIEW.md)
 - 🛠️ [Development Guidelines](docs/DEVELOPMENT_GUIDELINES.md)
 - 📝 [TypeScript Coding Standards](docs/TYPESCRIPT_CODING_STANDARDS.md)
+- 🧪 [E2E Testing Guide](docs/E2E_TESTING_GUIDE.md)
 - ☁️ [SonarQube Setup Guide](docs/SONARQUBE_SETUP.md)
 - 🔒 [Branch Protection Setup](docs/BRANCH_PROTECTION_SETUP.md)
 
