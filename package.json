@@ -20,6 +20,7 @@
     "preview": "vite preview",
     "test": "npm run lint && npm run typecheck:web && npm run typecheck:node",
     "test:e2e": "playwright test",
+    "test:e2e:safe": "npm run fix:e2e && playwright test",
     "test:unit": "vitest",
     "test:unit:coverage": "vitest run --coverage --coverage.reporter=lcov",
     "test:coverage": "npm run test:unit:coverage",

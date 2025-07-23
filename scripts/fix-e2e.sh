@@ -84,8 +84,8 @@ print_success "Test artifacts cleaned"
 # 4. Check if build is needed
 print_step "Checking application build..."
 
-if [[ ! -d "dist-electron" ]] || [[ ! -d "dist" ]]; then
-    print_warning "Application not built, building now..."
+if [[ ! -d "dist-electron" ]] || [[ ! -f "dist-electron/main.js" ]] || [[ ! -d "dist" ]]; then
+    print_warning "Application not built or missing files, building now..."
     npm run build
     print_success "Build completed"
 else
