@@ -1,30 +1,83 @@
 #!/bin/bash
 
-echo "🚀 Running pre-push checks..."
+echo "🔍 Running comprehensive pre-push checks..."
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+print_step() {
+    echo -e "${BLUE}▶ $1${NC}"
+}
+
+print_success() {
+    echo -e "${GREEN}✅ $1${NC}"
+}
+
+print_warning() {
+    echo -e "${YELLOW}⚠️ $1${NC}"
+}
+
+print_error() {
+    echo -e "${RED}❌ $1${NC}"
+}
 
 # Get the remote and URL
 remote="$1"
 url="$2"
 
-# Check if we're pushing to main branch
+# Get current branch
+current_branch=$(git symbolic-ref HEAD | sed 's/refs\/heads\///' 2>/dev/null || echo "HEAD")
 protected_branch='main'
-current_branch=$(git symbolic-ref HEAD | sed 's/refs\/heads\///')
 
+print_step "Pushing from branch: $current_branch"
+
+# Always run comprehensive checks before push (since commit only ran fast checks)
+echo ""
+echo "🎯 Since pre-commit only ran fast checks, running full quality validation now..."
+
+# Check if we have the quality check script
+if [[ ! -f "scripts/quality-check.sh" ]]; then
+    print_error "Quality check script not found. Cannot proceed with push."
+    exit 1
+fi
+
+# Run comprehensive quality checks with coverage
+print_step "Running full quality check with coverage..."
+if ./scripts/quality-check.sh; then
+    print_success "Comprehensive quality checks passed"
+else
+    print_error "Comprehensive quality checks failed"
+    echo ""
+    echo "💡 Issues found in comprehensive checks:"
+    echo "   - Check test coverage (minimum 80% required)"
+    echo "   - Review SonarQube analysis results"
+    echo "   - Fix any remaining code quality issues"
+    echo ""
+    echo "   Run 'npm run quality:check' locally to debug"
+    echo "   Or use 'git push --no-verify' to bypass (not recommended)"
+    exit 1
+fi
+
+# Additional checks for main branch
 if [[ "$current_branch" == "$protected_branch" ]]; then
-    echo "⚠️ Pushing to protected branch '$protected_branch'."
-    echo "🔍 Running comprehensive quality checks..."
+    print_warning "Pushing to protected branch '$protected_branch'"
     
-    # Run full quality check including E2E tests
-    if command -v npm &> /dev/null; then
-        if npm run quality:full; then
-            echo "✅ All comprehensive checks passed."
-        else
-            echo "❌ Comprehensive checks failed."
-            echo "💡 Please fix all issues before pushing to $protected_branch"
-            echo "   Or use 'git push --no-verify' to bypass (not recommended for main branch)."
-            exit 1
-        fi
+    # Run E2E tests for main branch
+    print_step "Running E2E tests for main branch..."
+    if npm run test:e2e:safe; then
+        print_success "E2E tests passed"
+    else
+        print_error "E2E tests failed"
+        echo "💡 E2E tests must pass before pushing to main branch"
+        echo "   Debug with: npm run test:e2e"
+        exit 1
     fi
 fi
 
-echo "✅ Pre-push checks completed successfully."
+echo ""
+print_success "All pre-push checks completed successfully! 🎉"
+print_step "Ready to push high-quality code! 🚀"
