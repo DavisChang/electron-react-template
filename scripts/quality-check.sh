@@ -100,8 +100,6 @@ fi
 print_step "Checking if project builds successfully..."
 if npm run build > /dev/null 2>&1; then
     print_success "Build completed successfully"
-    # Clean up build artifacts to keep workspace clean
-    rm -rf dist dist-electron
 else
     print_error "Build failed. Please fix build issues."
     exit 1
@@ -128,6 +126,11 @@ if [[ -z "$CI" ]]; then
         print_success "E2E tests passed"
     fi
 fi
+
+# Clean up build artifacts after all tests complete
+print_step "Cleaning up build artifacts..."
+rm -rf dist dist-electron
+print_success "Build artifacts cleaned up"
 
 # 6. SonarQube local analysis (if sonar-scanner is available)
 if command -v sonar-scanner &> /dev/null; then
