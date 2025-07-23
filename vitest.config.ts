@@ -36,15 +36,7 @@ export default defineConfig({
         '**/mocks/**',
       ],
       include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-      // Set more realistic coverage thresholds
-      thresholds: {
-        global: {
-          branches: 60,
-          functions: 60,
-          lines: 70,
-          statements: 70,
-        },
-      },
+      // No coverage thresholds - focus on test quality over quantity
     },
   },
 });

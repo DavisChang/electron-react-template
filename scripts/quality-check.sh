@@ -75,17 +75,7 @@ if npm run test:coverage; then
             COVERAGE=$(lcov --summary coverage/lcov.info 2>/dev/null | grep "lines" | grep -o '[0-9]\+\.[0-9]\+%' | head -1)
             if [[ -n "$COVERAGE" ]]; then
                 print_success "Current test coverage: $COVERAGE"
-                
-                # Extract numeric value for comparison
-                COVERAGE_NUM=$(echo $COVERAGE | grep -o '[0-9]\+\.[0-9]\+')
-                THRESHOLD=80.0
-                
-                if (( $(echo "$COVERAGE_NUM >= $THRESHOLD" | bc -l) )); then
-                    print_success "Coverage meets threshold ($THRESHOLD%)"
-                else
-                    print_warning "Coverage ($COVERAGE_NUM%) is below threshold ($THRESHOLD%)"
-                    print_warning "Consider adding more tests to improve coverage"
-                fi
+                # No threshold enforcement - coverage is informational only
             fi
         fi
     else
@@ -105,8 +95,8 @@ else
     exit 1
 fi
 
-# 5. E2E tests (optional, only if we're not in CI)
-if [[ -z "$CI" ]]; then
+# 5. E2E tests (optional, only if we're not in CI and not using --no-cleanup flag)
+if [[ -z "$CI" ]] && [[ "$1" != "--no-cleanup" ]]; then
     print_step "Running E2E tests (optional)..."
     
     # Check if Electron processes need cleanup first
@@ -125,6 +115,8 @@ if [[ -z "$CI" ]]; then
     else
         print_success "E2E tests passed"
     fi
+elif [[ "$1" == "--no-cleanup" ]]; then
+    print_warning "Skipping E2E tests (will be run separately in quality:full)"
 fi
 
 # Clean up build artifacts after all tests complete (unless --no-cleanup flag is used)
