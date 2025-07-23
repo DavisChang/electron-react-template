@@ -1,43 +1,205 @@
-name: Build Electron App
+name: 📦 Electron App Release Build
 
 on:
+  # Trigger on releases and version tags
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
+  # Manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      draft_release:
+        description: 'Create draft release'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+  ELECTRON_CACHE: ~/.cache/electron
+  ELECTRON_BUILDER_CACHE: ~/.cache/electron-builder
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16' # Ensure this matches your project Node.js version
-      - name: Install dependencies
-        run: npm install
-      - name: Build and Package Electron App for Windows
-        run: npm run build:win # Runs the build and packaging script for Windows
-
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - name: Install dependencies
-        run: npm install
-      - name: Build and Package Electron App for macOS
-        run: npm run build:mac # Runs the build and packaging script for macOS
-
-  build-linux:
+  # ===============================
+  # Pre-build Quality Checks
+  # ===============================
+  pre-build-checks:
+    name: 🔍 Pre-build Quality Checks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - name: 📂 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
-      - name: Install dependencies
-        run: npm install
-      - name: Build and Package Electron App for Linux
-        run: npm run build:linux # Runs the build and packaging script for Linux
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🧪 Run tests
+        run: npm run test:unit
+
+      - name: 🏗️ Test build
+        run: npm run build
+
+  # ===============================
+  # Cross-platform Electron Builds
+  # ===============================
+  build-electron:
+    name: 🏗️ Build Electron App
+    needs: pre-build-checks
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            platform: win
+            arch: x64
+            artifact_name: 'electron-app-windows'
+
+          - os: macos-latest
+            platform: mac
+            arch: universal
+            artifact_name: 'electron-app-macos'
+
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+            artifact_name: 'electron-app-linux'
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: 📂 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: 🍎 Setup macOS certificates (macOS only)
+        if: matrix.os == 'macos-latest'
+        uses: apple-actions/import-codesign-certs@v3
+        with:
+          p12-file-base64: ${{ secrets.MACOS_CERTIFICATE }}
+          p12-password: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+        continue-on-error: true
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build web application
+        run: npm run build
+
+      - name: 📦 Build Electron app (${{ matrix.platform }})
+        run: |
+          if [[ "${{ matrix.platform }}" == "win" ]]; then
+            npm run build:win
+          elif [[ "${{ matrix.platform }}" == "mac" ]]; then
+            npm run build:mac
+          elif [[ "${{ matrix.platform }}" == "linux" ]]; then
+            npm run build:linux
+          fi
+        shell: bash
+
+      - name: 📊 List build artifacts
+        run: |
+          echo "Build artifacts:"
+          find dist -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.zip" -o -name "*.tar.gz" | head -10
+        shell: bash
+
+      - name: 📤 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.AppImage
+            dist/*.zip
+            dist/*.tar.gz
+            dist/*.deb
+            dist/*.rpm
+          retention-days: 30
+
+  # ===============================
+  # Create GitHub Release
+  # ===============================
+  create-release:
+    name: 🚀 Create Release
+    needs: build-electron
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📂 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📥 Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./release-artifacts
+
+      - name: 📊 List release artifacts
+        run: |
+          echo "Release artifacts:"
+          find ./release-artifacts -type f | sort
+
+      - name: 📝 Generate release notes
+        id: release_notes
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+          # Generate release notes
+          cat > release_notes.md << EOF
+          # 🚀 Release $VERSION
+
+          ## 📦 Download Assets
+
+          ### Windows
+          - 📁 \`.exe\` - Windows installer
+          - 📁 \`.zip\` - Portable Windows version
+
+          ### macOS  
+          - 📁 \`.dmg\` - macOS disk image
+
+          ### Linux
+          - 📁 \`.AppImage\` - Universal Linux application
+          - 📁 \`.deb\` - Debian/Ubuntu package
+          - 📁 \`.rpm\` - Red Hat/CentOS package
+
+          ## ✨ What's New
+
+          See the [changelog](./CHANGELOG.md) for detailed changes.
+
+          ## 🛠️ Installation
+
+          1. Download the appropriate file for your operating system
+          2. Install or run the application
+          3. Enjoy the new features!
+
+          ---
+
+          **Full Changelog**: [View on GitHub](https://github.com/${{ github.repository }}/compare/v0.0.7...$VERSION)
+          EOF
+
+      - name: 🚀 Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./release-artifacts/**/*
+          name: 'Release ${{ steps.release_notes.outputs.VERSION }}'
+          body_path: release_notes.md
+          draft: ${{ github.event.inputs.draft_release == 'true' }}
+          prerelease: ${{ contains(steps.release_notes.outputs.VERSION, '-') }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
