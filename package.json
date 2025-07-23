@@ -30,9 +30,12 @@
     "pre-commit": "npm run quality:check",
     "setup:hooks": "./scripts/setup-hooks.sh",
     "setup:dev": "npm install && ./scripts/setup-hooks.sh && npm run quality:check",
+    "setup:new-dev": "./scripts/setup-new-dev.sh",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,md}\" \"electron/**/*.{ts,js}\" \"docs/**/*.md\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,md}\" \"electron/**/*.{ts,js}\" \"docs/**/*.md\"",
     "lint:fix": "npm run lint -- --fix",
+    "analyze": "./scripts/analyze-code.sh",
+    "badges": "./scripts/generate-badges.sh",
     "test:build": "npm run lint && npm run typecheck:web && npm run typecheck:node && npm run build",
     "typecheck:web": "tsc --noEmit -p tsconfig.json --composite false",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false"

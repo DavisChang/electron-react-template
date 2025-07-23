@@ -1,0 +1,29 @@
+# Global owners - require review for all changes
+* @DavisChang
+
+# Quality control and configuration files - require special attention
+/.github/ @DavisChang
+/scripts/ @DavisChang
+/docs/ @DavisChang
+/.eslintrc.json @DavisChang
+/.prettierrc @DavisChang
+/sonar-project.properties @DavisChang
+/vite.config.ts @DavisChang
+/tsconfig*.json @DavisChang
+/package.json @DavisChang
+
+# Frontend components - require frontend expertise
+/src/components/ @DavisChang
+/src/hooks/ @DavisChang
+
+# Electron main process - require Electron expertise
+/electron/ @DavisChang
+
+# Test files - require testing expertise
+**/*.test.* @DavisChang
+**/*.spec.* @DavisChang
+/e2e/ @DavisChang
+
+# Build and deployment configuration
+/electron-builder.json5 @DavisChang
+/.github/workflows/ @DavisChang 
