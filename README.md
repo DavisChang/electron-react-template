@@ -72,6 +72,7 @@ npm run test:e2e         # Run end-to-end tests
 # Utilities
 npm run badges           # Generate quality badges
 npm run setup:hooks      # Setup Git hooks
+npm run fix:e2e          # Fix E2E test environment issues
 ```
 
 ## 📁 Project Structure

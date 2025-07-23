@@ -110,10 +110,22 @@ fi
 # 5. E2E tests (optional, only if we're not in CI)
 if [[ -z "$CI" ]]; then
     print_step "Running E2E tests (optional)..."
-    if npm run test:e2e > /dev/null 2>&1; then
-        print_success "E2E tests passed"
+    
+    # Check if Electron processes need cleanup first
+    if ! npm run test:e2e > /dev/null 2>&1; then
+        print_warning "E2E tests failed, attempting process cleanup..."
+        if ./scripts/fix-e2e.sh > /dev/null 2>&1; then
+            print_info "Process cleanup completed, retrying E2E tests..."
+            if npm run test:e2e > /dev/null 2>&1; then
+                print_success "E2E tests passed after cleanup"
+            else
+                print_warning "E2E tests still failing. Run 'npm run fix:e2e' manually if needed."
+            fi
+        else
+            print_warning "E2E tests failed. This won't block the quality check."
+        fi
     else
-        print_warning "E2E tests failed or not configured. This won't block the quality check."
+        print_success "E2E tests passed"
     fi
 fi
 
