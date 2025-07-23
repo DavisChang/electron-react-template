@@ -9,10 +9,41 @@ import tsConfigPaths from 'vite-tsconfig-paths';
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
+    // 增加 chunk 大小警告限制
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'), // Main entry
         secondary: path.resolve(__dirname, 'secondary.html'), // Secondary HTML
+      },
+      output: {
+        manualChunks: id => {
+          // React core libraries
+          if (id.includes('react') || id.includes('react-dom')) {
+            return 'vendor-react';
+          }
+          // Large math/rendering libraries
+          if (id.includes('katex')) {
+            return 'vendor-katex';
+          }
+          // Markdown editor libraries
+          if (
+            id.includes('@uiw/react-md-editor') ||
+            id.includes('dompurify') ||
+            id.includes('html2canvas')
+          ) {
+            return 'vendor-markdown';
+          }
+          // Other large vendor libraries
+          if (
+            id.includes('node_modules') &&
+            (id.includes('mathjax') ||
+              id.includes('codemirror') ||
+              id.includes('highlight.js'))
+          ) {
+            return 'vendor-large';
+          }
+        },
       },
     },
   },

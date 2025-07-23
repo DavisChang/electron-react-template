@@ -63,7 +63,7 @@ jobs:
           fail_ci_if_error: false
           verbose: true
 
-      - name: 🏗️ Build application
+      - name: 🏗️ Build web application
         run: npm run build
 
       - name: 📦 Cache build artifacts

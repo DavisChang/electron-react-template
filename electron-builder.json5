@@ -1,45 +1,53 @@
 // @see - https://www.electron.build/configuration
 
 {
-  $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  appId: "com.electron.template",
+  $schema: 'https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json',
+  appId: 'com.electron.template',
   asar: true,
-  productName: "YourAppName",
+  productName: 'YourAppName',
   directories: {
-    output: "release/${version}",
+    output: 'release/${version}',
   },
-  files: ["dist", "dist-electron"],
+  files: ['dist', 'dist-electron'],
   mac: {
-    target: ["dmg", "zip"],
+    target: ['dmg', 'zip'],
     identity: null, // Disable code signing
     hardenedRuntime: false, // Disable hardened runtime
-    icon: "public/assets/icons/icon.icns",
-    artifactName: "${productName}-Mac-${version}-Installer.${ext}",
+    icon: 'public/assets/icons/icon.icns',
+    artifactName: '${productName}-Mac-${version}-Installer.${ext}',
   },
   win: {
     target: [
       {
-        target: "nsis",
-        arch: ["x64"],
+        target: 'nsis',
+        arch: ['x64'],
       },
       {
-        target: "msi",
-        arch: ["x64"],
+        target: 'msi',
+        arch: ['x64'],
       },
     ],
-    icon: "public/assets/icons/icon.ico",
-    artifactName: "${productName}-Windows-${version}-Setup.${ext}",
+    icon: 'public/assets/icons/icon.ico',
+    artifactName: '${productName}-Windows-${version}-Setup.${ext}',
   },
   nsis: {
     oneClick: false,
     perMachine: false,
     allowToChangeInstallationDirectory: true,
     deleteAppDataOnUninstall: false,
-    menuCategory: "Your App Category",
-    shortcutName: "YourAppName",
+    menuCategory: 'Your App Category',
+    shortcutName: 'YourAppName',
   },
   linux: {
-    target: ["AppImage"],
-    artifactName: "${productName}-Linux-${version}.${ext}",
+    target: ['AppImage'],
+    artifactName: '${productName}-Linux-${version}.${ext}',
   },
+  publish: {
+    provider: 'github',
+    releaseType: 'release',
+  },
+  // Disable auto-publish in CI unless it's a release build
+  buildDependenciesFromSource: false,
+  // Only publish on tagged releases
+  npmRebuild: false,
 }

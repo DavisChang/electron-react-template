@@ -106,6 +106,8 @@ jobs:
             npm run build:linux
           fi
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 📊 List build artifacts
         run: |
