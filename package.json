@@ -36,6 +36,7 @@
     "lint:fix": "npm run lint -- --fix",
     "analyze": "./scripts/analyze-code.sh",
     "badges": "./scripts/generate-badges.sh",
+    "fix:e2e": "./scripts/fix-e2e.sh",
     "test:build": "npm run lint && npm run typecheck:web && npm run typecheck:node && npm run build",
     "typecheck:web": "tsc --noEmit -p tsconfig.json --composite false",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false"

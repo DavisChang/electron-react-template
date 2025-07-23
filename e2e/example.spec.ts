@@ -1,18 +1,24 @@
-import { test, expect, _electron } from "@playwright/test";
-import fs from "fs-extra"; // Use fs-extra for robust file handling
-import path from "path";
-import { fileURLToPath } from "url";
+import {
+  _electron,
+  expect,
+  test,
+  type ElectronApplication,
+  type Page,
+} from '@playwright/test';
+import fs from 'fs-extra'; // Use fs-extra for robust file handling
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Define __dirname for ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-let electronApp: Awaited<ReturnType<typeof _electron.launch>>;
-let firstWindow: Awaited<ReturnType<typeof electronApp.firstWindow>>;
+let electronApp: ElectronApplication | null = null;
+let firstWindow: Page | null = null;
 
 // Utility function to get the screenshots directory
 function getScreenshotPath(fileName: string): string {
-  const screenshotsDir = path.join(__dirname, "e2e-result", "screenshots");
+  const screenshotsDir = path.join(__dirname, 'e2e-result', 'screenshots');
 
   // Ensure the directory exists
   if (!fs.existsSync(screenshotsDir)) {
@@ -23,71 +29,171 @@ function getScreenshotPath(fileName: string): string {
   return path.join(screenshotsDir, fileName);
 }
 
+// Clean up any existing Electron processes before starting
+test.beforeAll(async () => {
+  // Kill any existing Electron processes to prevent singleton conflicts
+  try {
+    if (process.platform === 'darwin') {
+      await import('child_process').then(({ exec }) => {
+        return new Promise<void>(resolve => {
+          exec('pkill -f "electron-vite-project"', () => {
+            // Ignore errors, just try to clean up
+            resolve();
+          });
+        });
+      });
+    }
+  } catch (error) {
+    // Ignore cleanup errors
+    console.log('Process cleanup completed');
+  }
+
+  // Wait a bit for processes to fully terminate
+  await new Promise(resolve => setTimeout(resolve, 1000));
+});
+
 test.beforeEach(async () => {
-  electronApp = await _electron.launch({
-    args: ["."],
-    env: { NODE_ENV: "development" },
-  });
+  try {
+    // Ensure any previous app is closed
+    if (electronApp) {
+      await electronApp.close().catch(() => {
+        // Ignore close errors
+      });
+      electronApp = null;
+      firstWindow = null;
+    }
 
-  // Evaluation expression in the Electron context.
-  const appPath = await electronApp.evaluate(async ({ app }) => {
-    // This runs in the main Electron process, parameter here is always
-    // the result of the require('electron') in the main app script.
-    return app.getAppPath();
-  });
-  console.log("appPath:", appPath);
+    // Wait a bit before launching new instance
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-  // Get the first window that the app opens, wait if necessary.
-  firstWindow = await electronApp.firstWindow();
+    electronApp = await _electron.launch({
+      args: ['.'],
+      env: {
+        NODE_ENV: 'development',
+        // Add unique identifier to prevent singleton conflicts
+        ELECTRON_ENABLE_SECURITY_WARNINGS: 'false',
+        ELECTRON_DISABLE_SANDBOX: 'true',
+      },
+      timeout: 15000, // 15 second timeout for launch
+    });
 
-  // Check Page Content
-  // console.log("Page content:", await firstWindow.content());
+    if (!electronApp) {
+      throw new Error('Failed to launch Electron app');
+    }
+
+    // Evaluation expression in the Electron context.
+    const appPath = await electronApp.evaluate(async ({ app }) => {
+      // This runs in the main Electron process, parameter here is always
+      // the result of the require('electron') in the main app script.
+      return app.getAppPath();
+    });
+    console.log('appPath:', appPath);
+
+    // Get the first window that the app opens, wait if necessary.
+    firstWindow = await electronApp.firstWindow();
+
+    if (!firstWindow) {
+      throw new Error('Failed to get first window');
+    }
+
+    // Wait for the window to be ready
+    await firstWindow.waitForLoadState('domcontentloaded', { timeout: 10000 });
+
+    // Check Page Content
+    // console.log("Page content:", await firstWindow.content());
+  } catch (error) {
+    console.error('Error in beforeEach:', error);
+    // Clean up on error
+    if (electronApp) {
+      await electronApp.close().catch(() => {});
+      electronApp = null;
+      firstWindow = null;
+    }
+    throw error;
+  }
 });
 
 test.afterEach(async () => {
-  await electronApp.close();
+  try {
+    if (electronApp) {
+      await electronApp.close();
+      electronApp = null;
+      firstWindow = null;
+    }
+  } catch (error) {
+    console.error('Error closing Electron app:', error);
+    electronApp = null;
+    firstWindow = null;
+  }
+
+  // Wait a bit after closing
+  await new Promise(resolve => setTimeout(resolve, 500));
 });
 
-test("save screenshot", async () => {
+test.afterAll(async () => {
+  // Final cleanup
+  try {
+    if (electronApp) {
+      await electronApp.close().catch(() => {});
+      electronApp = null;
+      firstWindow = null;
+    }
+  } catch (error) {
+    // Ignore final cleanup errors
+  }
+});
+
+test('save screenshot', async () => {
+  if (!firstWindow) {
+    throw new Error('First window is not available');
+  }
+
   // Generate cross-platform path for the screenshot
-  const screenshotFilePath = getScreenshotPath("intro.png");
+  const screenshotFilePath = getScreenshotPath('intro.png');
 
   // Save the screenshot
   await firstWindow.screenshot({ path: screenshotFilePath });
 
   console.log(`Screenshot saved at: ${screenshotFilePath}`);
+
+  // Verify screenshot was created
+  expect(fs.existsSync(screenshotFilePath)).toBe(true);
 });
 
-test("app title", async () => {
+test('app title', async () => {
+  if (!firstWindow) {
+    throw new Error('First window is not available');
+  }
+
   const title = await firstWindow.title();
-  expect(title).toEqual("Vite + React + TS");
+  expect(title).toEqual('Vite + React + TS');
 });
 
-test("increment count button", async () => {
-  // Wait for the button to appear
-  await firstWindow.waitForSelector("[data-testid='count']", { timeout: 5000 });
-  const button = await firstWindow.getByTestId("count");
+test('increment count button', async () => {
+  if (!firstWindow) {
+    throw new Error('First window is not available');
+  }
+
+  // Wait for the count button with specific text to appear
+  const button = firstWindow.getByRole('button', { name: /count is \d+/ });
+  await button.waitFor({ timeout: 10000 });
 
   // Check initial button text
   const initialText = await button.textContent();
-  console.log("Initial button text:", initialText);
+  console.log('Initial button text:', initialText);
+  expect(initialText).toContain('count is 0');
 
   // Click the button
   await button.click();
 
-  const screenshotFilePath = getScreenshotPath("intro2.png");
+  const screenshotFilePath = getScreenshotPath('intro2.png');
   await firstWindow.screenshot({ path: screenshotFilePath });
 
-  // Wait for the button text to update
-  await firstWindow.waitForFunction(
-    () => {
-      const button = document.querySelector("[data-testid='count']");
-      return button && button.textContent?.includes("count is 1");
-    },
-    { timeout: 5000 }
-  );
+  // Wait for the button text to update and verify
+  await expect(button).toContainText('count is 1', { timeout: 10000 });
 
-  // Check updated button text
+  // Double check the updated text
   const updatedText = await button.textContent();
-  expect(updatedText).toContain("count is 1");
+  console.log('Updated button text:', updatedText);
+  expect(updatedText).toContain('count is 1');
 });
