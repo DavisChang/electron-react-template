@@ -116,8 +116,10 @@ npm run lint:fix         # Auto-fix ESLint issues
 # 🧪 Testing Suite
 npm run test:unit        # Unit tests with Vitest
 npm run test:coverage    # Generate coverage reports (LCOV + HTML)
-npm run test:e2e         # E2E tests with Playwright
+npm run test:e2e         # E2E tests with Playwright (local with GUI)
 npm run test:e2e:safe    # E2E with auto-build verification
+npm run test:e2e:ci      # CI-optimized E2E tests
+npm run test:e2e:headless # Headless E2E tests (no display required)
 
 # 🔧 Development Tools
 npm run setup:hooks      # Install Git hooks (pre-commit + pre-push)
@@ -234,6 +236,8 @@ graph TD
 ### 🧪 **Testing & Quality**
 
 - 🎯 [**E2E Testing Guide**](docs/E2E_TESTING_GUIDE.md) - Playwright automation testing
+- 🎭 [**Headless E2E Testing**](docs/HEADLESS_E2E_TESTING.md) - CI environment setup &
+  troubleshooting
 - 📊 [**Code Coverage Reports**](coverage/lcov-report/index.html) - Live coverage dashboard
 - 🔍
   [**SonarCloud Dashboard**](https://sonarcloud.io/project/overview?id=DavisChang_electron-react-template) -
@@ -253,6 +257,7 @@ graph TD
 🎭 E2E Tests (Playwright)
 ├── 🌐 Cross-browser testing (Chromium, Firefox, Safari)
 ├── 🤖 Smart execution (only when UI changes detected)
+├── 🖥️ Headless CI support with Xvfb virtual display
 ├── 📱 Mobile viewport testing
 └── 📊 Visual regression testing
 
@@ -265,12 +270,12 @@ graph TD
 
 ### 📊 **Testing Coverage & Reports**
 
-| Test Type      | Coverage Target         | Report Format        | CI Integration   |
-| -------------- | ----------------------- | -------------------- | ---------------- |
-| **Unit Tests** | Informational (10% min) | HTML + LCOV          | ✅ Every push    |
-| **E2E Tests**  | Critical user paths     | Screenshots + Videos | ✅ Smart trigger |
-| **Type Check** | 100% (zero `any`)       | Console + JSON       | ✅ Every commit  |
-| **Security**   | Zero vulnerabilities    | SARIF + GitHub       | ✅ Weekly scan   |
+| Test Type      | Coverage Target         | Report Format                 | CI Integration                 |
+| -------------- | ----------------------- | ----------------------------- | ------------------------------ |
+| **Unit Tests** | Informational (10% min) | HTML + LCOV                   | ✅ Every push                  |
+| **E2E Tests**  | Critical user paths     | Screenshots + Videos + Traces | ✅ Smart trigger + Headless CI |
+| **Type Check** | 100% (zero `any`)       | Console + JSON                | ✅ Every commit                |
+| **Security**   | Zero vulnerabilities    | SARIF + GitHub                | ✅ Weekly scan                 |
 
 ## 🎨 Code Standards
 
